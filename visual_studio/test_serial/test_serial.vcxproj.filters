@@ -86,6 +86,15 @@
     <ClCompile Include="ThirdParty\kissfft\kiss_fft.c">
       <Filter>Code\ThirdParty\KISS_FFT</Filter>
     </ClCompile>
+    <ClCompile Include="ThirdParty\implot\implot_demo.cpp">
+      <Filter>Code\ThirdParty\IMPLOT\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="ThirdParty\implot\implot_items.cpp">
+      <Filter>Code\ThirdParty\IMPLOT\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="ThirdParty\implot\implot.cpp">
+      <Filter>Code\ThirdParty\IMPLOT\CPP</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\examples\MyImGui.h">
@@ -135,6 +144,12 @@
     </ClInclude>
     <ClInclude Include="ThirdParty\kissfft\kiss_fft.h">
       <Filter>Code\ThirdParty\KISS_FFT</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\implot\implot.h">
+      <Filter>Code\ThirdParty\IMPLOT\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\implot\implot_internal.h">
+      <Filter>Code\ThirdParty\IMPLOT\Header</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

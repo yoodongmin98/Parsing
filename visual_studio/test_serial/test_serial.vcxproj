@@ -141,6 +141,9 @@
     <ClCompile Include="ThirdParty\ImGui\imgui_draw.cpp" />
     <ClCompile Include="ThirdParty\ImGui\imgui_tables.cpp" />
     <ClCompile Include="ThirdParty\ImGui\imgui_widgets.cpp" />
+    <ClCompile Include="ThirdParty\implot\implot.cpp" />
+    <ClCompile Include="ThirdParty\implot\implot_demo.cpp" />
+    <ClCompile Include="ThirdParty\implot\implot_items.cpp" />
     <ClCompile Include="ThirdParty\kissfft\kiss_fft.c" />
   </ItemGroup>
   <ItemGroup>
@@ -164,6 +167,8 @@
     <ClInclude Include="ThirdParty\ImGui\imstb_rectpack.h" />
     <ClInclude Include="ThirdParty\ImGui\imstb_textedit.h" />
     <ClInclude Include="ThirdParty\ImGui\imstb_truetype.h" />
+    <ClInclude Include="ThirdParty\implot\implot.h" />
+    <ClInclude Include="ThirdParty\implot\implot_internal.h" />
     <ClInclude Include="ThirdParty\kissfft\kiss_fft.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

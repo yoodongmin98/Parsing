@@ -21,8 +21,8 @@ Core::~Core()
 
 void Core::Start(int argc, char** argv)
 {
-	port = argv[1];
-	sscanf_s(argv[2], "%lu", &baud);
+	port = "COM4";
+	baud = 921600;
 
 	serial::Serial my_serial(port, baud, serial::Timeout::simpleTimeout(1000));
 
