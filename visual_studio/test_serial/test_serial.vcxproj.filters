@@ -27,6 +27,12 @@
     <Filter Include="Code\ThirdParty\IMGUI\CPP">
       <UniqueIdentifier>{0171c996-0c68-449f-b644-2ceab14c7cf9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Code\ThirdParty\IMPLOT">
+      <UniqueIdentifier>{2285f5ab-ad85-40c5-b02b-21e1490d9d3a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\ThirdParty\KissFFT">
+      <UniqueIdentifier>{f4536147-08f8-4bca-8c34-9747c2a8a2c0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\examples\Buffer.cpp">
@@ -70,6 +76,66 @@
     </ClCompile>
     <ClCompile Include="..\..\examples\MyFFT.cpp">
       <Filter>Code\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ThirdParty\implot\implot_items.cpp">
+      <Filter>Code\ThirdParty\IMPLOT</Filter>
+    </ClCompile>
+    <ClCompile Include="ThirdParty\implot\.github\example_implot.cpp">
+      <Filter>Code\ThirdParty\IMPLOT</Filter>
+    </ClCompile>
+    <ClCompile Include="ThirdParty\implot\implot.cpp">
+      <Filter>Code\ThirdParty\IMPLOT</Filter>
+    </ClCompile>
+    <ClCompile Include="ThirdParty\implot\implot_demo.cpp">
+      <Filter>Code\ThirdParty\IMPLOT</Filter>
+    </ClCompile>
+    <ClCompile Include="ThirdParty\kissfft\test\benchfftw.c">
+      <Filter>Code\ThirdParty\KissFFT</Filter>
+    </ClCompile>
+    <ClCompile Include="ThirdParty\kissfft\test\benchkiss.c">
+      <Filter>Code\ThirdParty\KissFFT</Filter>
+    </ClCompile>
+    <ClCompile Include="ThirdParty\kissfft\test\doit.c">
+      <Filter>Code\ThirdParty\KissFFT</Filter>
+    </ClCompile>
+    <ClCompile Include="ThirdParty\kissfft\tools\fftutil.c">
+      <Filter>Code\ThirdParty\KissFFT</Filter>
+    </ClCompile>
+    <ClCompile Include="ThirdParty\kissfft\kfc.c">
+      <Filter>Code\ThirdParty\KissFFT</Filter>
+    </ClCompile>
+    <ClCompile Include="ThirdParty\kissfft\tools\kiss_fastfir.c">
+      <Filter>Code\ThirdParty\KissFFT</Filter>
+    </ClCompile>
+    <ClCompile Include="ThirdParty\kissfft\kiss_fft.c">
+      <Filter>Code\ThirdParty\KissFFT</Filter>
+    </ClCompile>
+    <ClCompile Include="ThirdParty\kissfft\kiss_fftnd.c">
+      <Filter>Code\ThirdParty\KissFFT</Filter>
+    </ClCompile>
+    <ClCompile Include="ThirdParty\kissfft\kiss_fftndr.c">
+      <Filter>Code\ThirdParty\KissFFT</Filter>
+    </ClCompile>
+    <ClCompile Include="ThirdParty\kissfft\kiss_fftr.c">
+      <Filter>Code\ThirdParty\KissFFT</Filter>
+    </ClCompile>
+    <ClCompile Include="ThirdParty\kissfft\tools\psdpng.c">
+      <Filter>Code\ThirdParty\KissFFT</Filter>
+    </ClCompile>
+    <ClCompile Include="ThirdParty\kissfft\test\pstats.c">
+      <Filter>Code\ThirdParty\KissFFT</Filter>
+    </ClCompile>
+    <ClCompile Include="ThirdParty\kissfft\test\test_real.c">
+      <Filter>Code\ThirdParty\KissFFT</Filter>
+    </ClCompile>
+    <ClCompile Include="ThirdParty\kissfft\test\test_simd.c">
+      <Filter>Code\ThirdParty\KissFFT</Filter>
+    </ClCompile>
+    <ClCompile Include="ThirdParty\kissfft\test\testcpp.cc">
+      <Filter>Code\ThirdParty\KissFFT</Filter>
+    </ClCompile>
+    <ClCompile Include="ThirdParty\kissfft\test\twotonetest.c">
+      <Filter>Code\ThirdParty\KissFFT</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -117,6 +183,42 @@
     </ClInclude>
     <ClInclude Include="..\..\examples\MyFFT.h">
       <Filter>Code\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\implot\implot.h">
+      <Filter>Code\ThirdParty\IMPLOT</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\implot\implot_internal.h">
+      <Filter>Code\ThirdParty\IMPLOT</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\kissfft\_kiss_fft_guts.h">
+      <Filter>Code\ThirdParty\KissFFT</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\kissfft\kfc.h">
+      <Filter>Code\ThirdParty\KissFFT</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\kissfft\kiss_fft.h">
+      <Filter>Code\ThirdParty\KissFFT</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\kissfft\kiss_fft_log.h">
+      <Filter>Code\ThirdParty\KissFFT</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\kissfft\kiss_fftnd.h">
+      <Filter>Code\ThirdParty\KissFFT</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\kissfft\kiss_fftndr.h">
+      <Filter>Code\ThirdParty\KissFFT</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\kissfft\kiss_fftr.h">
+      <Filter>Code\ThirdParty\KissFFT</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\kissfft\kissfft.hh">
+      <Filter>Code\ThirdParty\KissFFT</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\kissfft\kissfft_i32.hh">
+      <Filter>Code\ThirdParty\KissFFT</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\kissfft\test\pstats.h">
+      <Filter>Code\ThirdParty\KissFFT</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
