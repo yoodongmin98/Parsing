@@ -16,6 +16,7 @@
 build
 bin
 cpp
+lib
 */lib/*
 installed
 patched

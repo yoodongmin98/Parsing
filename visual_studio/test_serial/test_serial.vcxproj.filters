@@ -27,18 +27,6 @@
     <Filter Include="Code\ThirdParty\IMGUI\CPP">
       <UniqueIdentifier>{0171c996-0c68-449f-b644-2ceab14c7cf9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Code\ThirdParty\IMPLOT">
-      <UniqueIdentifier>{0ad167c3-7a4d-45e3-846f-4150cd9aad48}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\ThirdParty\IMPLOT\Header">
-      <UniqueIdentifier>{fc4de853-3fef-4516-a750-9c6fec0e9fa6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\ThirdParty\IMPLOT\CPP">
-      <UniqueIdentifier>{b96cbd49-9f40-48e0-aaeb-d5b6aff76331}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\ThirdParty\KISS_FFT">
-      <UniqueIdentifier>{b80e42fc-12be-4141-87a3-4b8172480d4b}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\examples\Buffer.cpp">
@@ -82,18 +70,6 @@
     </ClCompile>
     <ClCompile Include="..\..\examples\MyFFT.cpp">
       <Filter>Code\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ThirdParty\kissfft\kiss_fft.c">
-      <Filter>Code\ThirdParty\KISS_FFT</Filter>
-    </ClCompile>
-    <ClCompile Include="ThirdParty\implot\implot_demo.cpp">
-      <Filter>Code\ThirdParty\IMPLOT\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="ThirdParty\implot\implot_items.cpp">
-      <Filter>Code\ThirdParty\IMPLOT\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="ThirdParty\implot\implot.cpp">
-      <Filter>Code\ThirdParty\IMPLOT\CPP</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -141,15 +117,6 @@
     </ClInclude>
     <ClInclude Include="..\..\examples\MyFFT.h">
       <Filter>Code\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ThirdParty\kissfft\kiss_fft.h">
-      <Filter>Code\ThirdParty\KISS_FFT</Filter>
-    </ClInclude>
-    <ClInclude Include="ThirdParty\implot\implot.h">
-      <Filter>Code\ThirdParty\IMPLOT\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="ThirdParty\implot\implot_internal.h">
-      <Filter>Code\ThirdParty\IMPLOT\Header</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
