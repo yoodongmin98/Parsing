@@ -141,26 +141,10 @@
     <ClCompile Include="ThirdParty\ImGui\imgui_draw.cpp" />
     <ClCompile Include="ThirdParty\ImGui\imgui_tables.cpp" />
     <ClCompile Include="ThirdParty\ImGui\imgui_widgets.cpp" />
-    <ClCompile Include="ThirdParty\implot\.github\example_implot.cpp" />
     <ClCompile Include="ThirdParty\implot\implot.cpp" />
     <ClCompile Include="ThirdParty\implot\implot_demo.cpp" />
     <ClCompile Include="ThirdParty\implot\implot_items.cpp" />
-    <ClCompile Include="ThirdParty\kissfft\kfc.c" />
     <ClCompile Include="ThirdParty\kissfft\kiss_fft.c" />
-    <ClCompile Include="ThirdParty\kissfft\kiss_fftnd.c" />
-    <ClCompile Include="ThirdParty\kissfft\kiss_fftndr.c" />
-    <ClCompile Include="ThirdParty\kissfft\kiss_fftr.c" />
-    <ClCompile Include="ThirdParty\kissfft\test\benchfftw.c" />
-    <ClCompile Include="ThirdParty\kissfft\test\benchkiss.c" />
-    <ClCompile Include="ThirdParty\kissfft\test\doit.c" />
-    <ClCompile Include="ThirdParty\kissfft\test\pstats.c" />
-    <ClCompile Include="ThirdParty\kissfft\test\testcpp.cc" />
-    <ClCompile Include="ThirdParty\kissfft\test\test_real.c" />
-    <ClCompile Include="ThirdParty\kissfft\test\test_simd.c" />
-    <ClCompile Include="ThirdParty\kissfft\test\twotonetest.c" />
-    <ClCompile Include="ThirdParty\kissfft\tools\fftutil.c" />
-    <ClCompile Include="ThirdParty\kissfft\tools\kiss_fastfir.c" />
-    <ClCompile Include="ThirdParty\kissfft\tools\psdpng.c" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\serial\serial.vcxproj">
@@ -185,16 +169,7 @@
     <ClInclude Include="ThirdParty\ImGui\imstb_truetype.h" />
     <ClInclude Include="ThirdParty\implot\implot.h" />
     <ClInclude Include="ThirdParty\implot\implot_internal.h" />
-    <ClInclude Include="ThirdParty\kissfft\kfc.h" />
-    <ClInclude Include="ThirdParty\kissfft\kissfft.hh" />
-    <ClInclude Include="ThirdParty\kissfft\kissfft_i32.hh" />
     <ClInclude Include="ThirdParty\kissfft\kiss_fft.h" />
-    <ClInclude Include="ThirdParty\kissfft\kiss_fftnd.h" />
-    <ClInclude Include="ThirdParty\kissfft\kiss_fftndr.h" />
-    <ClInclude Include="ThirdParty\kissfft\kiss_fftr.h" />
-    <ClInclude Include="ThirdParty\kissfft\kiss_fft_log.h" />
-    <ClInclude Include="ThirdParty\kissfft\test\pstats.h" />
-    <ClInclude Include="ThirdParty\kissfft\_kiss_fft_guts.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
