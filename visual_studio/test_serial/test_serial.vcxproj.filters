@@ -1,22 +1,155 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    <Filter Include="Code">
+      <UniqueIdentifier>{0df61db7-f9d5-4a13-a1d3-68a9e1fbd5f4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files">
+    <Filter Include="Main">
+      <UniqueIdentifier>{5d664ab4-03a2-40d7-9d77-d0c18e05d040}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Header Files">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    <Filter Include="Code\Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Code\ThirdParty">
+      <UniqueIdentifier>{82f2b8e8-aed8-483c-869b-daa1d3145d28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\ThirdParty\IMGUI">
+      <UniqueIdentifier>{2c0d791b-da4c-42ce-87e3-628d7da39042}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\ThirdParty\IMGUI\Header">
+      <UniqueIdentifier>{06733b06-775c-456a-b351-fc463b536716}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\ThirdParty\IMGUI\CPP">
+      <UniqueIdentifier>{0171c996-0c68-449f-b644-2ceab14c7cf9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\ThirdParty\IMPLOT">
+      <UniqueIdentifier>{0ad167c3-7a4d-45e3-846f-4150cd9aad48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\ThirdParty\IMPLOT\Header">
+      <UniqueIdentifier>{fc4de853-3fef-4516-a750-9c6fec0e9fa6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\ThirdParty\IMPLOT\CPP">
+      <UniqueIdentifier>{b96cbd49-9f40-48e0-aaeb-d5b6aff76331}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\ThirdParty\KISS_FFT">
+      <UniqueIdentifier>{b80e42fc-12be-4141-87a3-4b8172480d4b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\examples\serial_example.cc">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\..\examples\Buffer.cpp">
+      <Filter>Code\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\examples\Calculator.cpp">
+      <Filter>Code\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\examples\Core.cpp">
+      <Filter>Code\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\examples\MyImGui.cpp">
+      <Filter>Code\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ThirdParty\ImGui\imgui.cpp">
+      <Filter>Code\ThirdParty\IMGUI\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="ThirdParty\ImGui\imgui_demo.cpp">
+      <Filter>Code\ThirdParty\IMGUI\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="ThirdParty\ImGui\imgui_draw.cpp">
+      <Filter>Code\ThirdParty\IMGUI\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="ThirdParty\ImGui\backends\imgui_impl_dx9.cpp">
+      <Filter>Code\ThirdParty\IMGUI\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="ThirdParty\ImGui\backends\imgui_impl_win32.cpp">
+      <Filter>Code\ThirdParty\IMGUI\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="ThirdParty\ImGui\imgui_tables.cpp">
+      <Filter>Code\ThirdParty\IMGUI\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="ThirdParty\ImGui\imgui_widgets.cpp">
+      <Filter>Code\ThirdParty\IMGUI\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="ThirdParty\implot\implot.cpp">
+      <Filter>Code\ThirdParty\IMPLOT\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="ThirdParty\implot\implot_demo.cpp">
+      <Filter>Code\ThirdParty\IMPLOT\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="ThirdParty\implot\implot_items.cpp">
+      <Filter>Code\ThirdParty\IMPLOT\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="ThirdParty\kissfft\kiss_fft.c">
+      <Filter>Code\ThirdParty\KISS_FFT</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\examples\serial_main.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\examples\AdcFilter.cpp">
+      <Filter>Code\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\examples\MyFFT.cpp">
+      <Filter>Code\Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\examples\MyImGui.h">
+      <Filter>Code\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\examples\Buffer.h">
+      <Filter>Code\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\examples\Core.h">
+      <Filter>Code\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\examples\Calculator.h">
+      <Filter>Code\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\examples\DataClass.h">
+      <Filter>Code\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\ImGui\imgui.h">
+      <Filter>Code\ThirdParty\IMGUI\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\ImGui\backends\imgui_impl_dx9.h">
+      <Filter>Code\ThirdParty\IMGUI\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\ImGui\backends\imgui_impl_win32.h">
+      <Filter>Code\ThirdParty\IMGUI\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\ImGui\imgui_internal.h">
+      <Filter>Code\ThirdParty\IMGUI\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\ImGui\imstb_rectpack.h">
+      <Filter>Code\ThirdParty\IMGUI\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\ImGui\imstb_textedit.h">
+      <Filter>Code\ThirdParty\IMGUI\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\ImGui\imstb_truetype.h">
+      <Filter>Code\ThirdParty\IMGUI\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\ImGui\imconfig.h">
+      <Filter>Code\ThirdParty\IMGUI\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\implot\implot.h">
+      <Filter>Code\ThirdParty\IMPLOT\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\implot\implot_internal.h">
+      <Filter>Code\ThirdParty\IMPLOT\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\kissfft\kiss_fft.h">
+      <Filter>Code\ThirdParty\KISS_FFT</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\examples\AdcFilter.h">
+      <Filter>Code\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\examples\MyFFT.h">
+      <Filter>Code\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
