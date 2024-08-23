@@ -19,6 +19,9 @@ private:
 	void Discrete_Fourier_Transform(std::vector<float>& _IArray, std::vector<float>& _QArray);
 	void Cooley_Tukey_FFT(std::vector<std::complex<double>> _IQArray);
 
-	//Memoization
+	//Memoization(기저함수)
 	std::vector<std::vector<std::complex<double>>> BasisFunctionData;
+	
+	std::vector<std::complex<double>> CalculateArray;
+
 };

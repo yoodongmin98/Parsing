@@ -31,7 +31,7 @@ Buffer::~Buffer()
 void Buffer::Fill_Adc_raw_buf(uint8_t __byte)
 {
 	//Adc_raw_buf[0] = Adc_raw_buf[3]; //완성되기전에는 주석 // 왜 하는건지는 모르겠구요...
-	Adc_raw_buf.push_back(__byte);
+	Adc_raw_buf.emplace_back(__byte);
 }
 
 
