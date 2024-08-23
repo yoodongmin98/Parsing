@@ -5,6 +5,7 @@
 #include "Buffer.h"
 #include "DataClass.h"
 #include "AdcFilter.h"
+#include "MyFFT.h"
 
 #include "kiss_fft.h"
 
@@ -16,6 +17,7 @@ Buffer::Buffer()
 	MDRRadar_Datas = std::make_shared<MDRRadar_Data>();
 	D_SimpleResult = std::make_shared<DopplerSimpleResult>();
 	AdcFilters = std::make_shared<AdcFilter>();
+	MyFFTs = std::make_shared<MyFFT>();
 	MDR_I_Mag.resize(MDR_ADC_SampleSize / 2);
 	MDR_Q_Mag.resize(MDR_ADC_SampleSize / 2);
 }
@@ -125,21 +127,24 @@ void Buffer::FastFurierTransform(int Reverse)
 			MDR_I_FFT.clear();
 			MDR_Q_FFT.clear();
 		}
-		std::vector<kiss_fft_cpx> input(MDR_ADC_SampleSize);
-		std::vector<kiss_fft_cpx> output(MDR_ADC_SampleSize);
-		kiss_fft_cfg cfg = kiss_fft_alloc(MDR_ADC_SampleSize, 0, nullptr, nullptr);
+		//std::vector<kiss_fft_cpx> input(MDR_ADC_SampleSize);
+		//std::vector<kiss_fft_cpx> output(MDR_ADC_SampleSize);
+		//kiss_fft_cfg cfg = kiss_fft_alloc(MDR_ADC_SampleSize, 0, nullptr, nullptr);
 
-		for (int i = 0; i < MDR_ADC_SampleSize; ++i) 
-		{
-			input[i].r = MDR_I_Window[i];  // 실수부에 I 데이터 설정
-			input[i].i = MDR_Q_Window[i];  // 허수부에 Q 데이터 설정
-		}
-		kiss_fft(cfg, input.data(), output.data());
-		for (int j = 0; j < MDR_ADC_SampleSize; ++j)
-		{
-			MDR_I_FFT.emplace_back(output[j].r);
-			MDR_Q_FFT.emplace_back(output[j].i);
-		}
+		//for (int i = 0; i < MDR_ADC_SampleSize; ++i) 
+		//{
+		//	input[i].r = MDR_I_Window[i];  // 실수부에 I 데이터 설정
+		//	input[i].i = MDR_Q_Window[i];  // 허수부에 Q 데이터 설정
+		//}
+		//kiss_fft(cfg, input.data(), output.data());
+		//for (int j = 0; j < MDR_ADC_SampleSize; ++j)
+		//{
+		//	MDR_I_FFT.emplace_back(output[j].r);
+		//	MDR_Q_FFT.emplace_back(output[j].i);
+		//}
+		MDR_I_FFT = MDR_I_Window;
+		MDR_Q_FFT = MDR_Q_Window;
+		MyFFTs->Foward_FFT(MDR_I_FFT, MDR_Q_FFT);
 	}
 	else
 	{

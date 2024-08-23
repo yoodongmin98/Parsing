@@ -2,7 +2,7 @@
 #include <vector>
 #include <iostream>
 
-
+class MyFFT;
 class AdcFilter;
 class Calculator;
 class MDRRadar_Data;
@@ -204,4 +204,5 @@ private:
 	std::shared_ptr<MDRRadar_Data> MDRRadar_Datas = nullptr;
 	std::shared_ptr<DopplerSimpleResult> D_SimpleResult = nullptr;
 	std::shared_ptr<AdcFilter> AdcFilters = nullptr;
+	std::shared_ptr<MyFFT> MyFFTs = nullptr;
 };
