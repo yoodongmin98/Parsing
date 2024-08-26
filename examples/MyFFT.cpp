@@ -9,7 +9,6 @@
 
 MyFFT::MyFFT()
 {
-	CalculateBasisFunction();
 	CalculateArray.resize(MDR_ADC_SampleSize);
 }
 
@@ -34,6 +33,13 @@ void MyFFT::Foward_FFT(std::vector<float>& _IArray, std::vector<float>& _QArray)
 			Cooley_Tukey_FFT(CalculateArray);
 		else
 			throw;
+		for (auto i = 0; i < MDR_ADC_SampleSize; ++i)
+		{
+			// 복소수 객체를 생성하고 실수부와 허수부를 설정
+			_IArray[i] = CalculateArray[i].real();
+			_QArray[i] = CalculateArray[i].imag();
+		}
+		return;
 	}
 	catch (int n)
 	{
@@ -46,7 +52,7 @@ void MyFFT::Foward_FFT(std::vector<float>& _IArray, std::vector<float>& _QArray)
 void MyFFT::Reverse_FFT(std::vector<float>& _IArray, std::vector<float>& _QArray)
 {
 	/*if()*/ //FFT계산이 미리 들어와있지 않다면 MsgAssert
-	Cooley_Tukey_FFT(CalculateArray);
+	//Cooley_Tukey_FFT(CalculateArray);
 }
 
 
@@ -75,6 +81,9 @@ void MyFFT::CalculateBasisFunction()
 void MyFFT::Discrete_Fourier_Transform(std::vector<float>& _IArray, std::vector<float>& _QArray)
 {
 	//DFT 구현
+
+	//기저함수 계산
+	CalculateBasisFunction();
 
 	//결과값을 담을 float vector (I,Q)
 	std::vector<float> IResult(MDR_ADC_SampleSize, 0);
@@ -119,14 +128,12 @@ void MyFFT::Cooley_Tukey_FFT(std::vector<std::complex<double>> _IQArray)
 	Cooley_Tukey_FFT(even);
 	Cooley_Tukey_FFT(odd);
 
-	//병합코드 짜야되는데 종나 귀찬훕ㄷ먀후ㅠㅁ배ㅣ데무
-	for (int i = 0; i < Size / 2; ++i) 
+	// 기저함수를 계산하여 결과 병합
+	for (int k = 0; k < Size / 2; ++k)
 	{
-		double angle = 2 * PI * i / Size;
-		std::complex<double> w(cos(angle), sin(angle));
-		std::complex<double> t = w * odd[i];
-		_IQArray[i] = even[i] + t;
-		_IQArray[i + Size / 2] = even[i] - t;
-
+		std::complex<double> t = std::polar(1.0, -2.0 * PI * k / Size) * odd[k];
+		_IQArray[k] = even[k] + t;
+		_IQArray[k + Size / 2] = even[k] - t;
 	}
+
 }
