@@ -108,7 +108,7 @@ void MyFFT::Discrete_Fourier_Transform(std::vector<float>& _IArray, std::vector<
 }
 
 //bool값 추가로 reverse판별(나중에)
-void MyFFT::Cooley_Tukey_FFT(std::vector<std::complex<double>> _IQArray)
+void MyFFT::Cooley_Tukey_FFT(std::vector<std::complex<double>>& _IQArray)
 {
 	int Size = _IQArray.size();
 	if (Size <= 1)
@@ -118,6 +118,7 @@ void MyFFT::Cooley_Tukey_FFT(std::vector<std::complex<double>> _IQArray)
 	std::vector<std::complex<double>> even(Size / 2);
 	std::vector<std::complex<double>> odd(Size / 2);
 
+	//홀수와 짝수 idx로 나눔
 	for (int i = 0; i < Size / 2; ++i) 
 	{
 		even[i] = _IQArray[i * 2];
@@ -131,9 +132,9 @@ void MyFFT::Cooley_Tukey_FFT(std::vector<std::complex<double>> _IQArray)
 	// 기저함수를 계산하여 결과 병합
 	for (int k = 0; k < Size / 2; ++k)
 	{
+		//홀수 idx에 대한 기저함수 내적을 미리 구함
 		std::complex<double> t = std::polar(1.0, -2.0 * PI * k / Size) * odd[k];
 		_IQArray[k] = even[k] + t;
 		_IQArray[k + Size / 2] = even[k] - t;
 	}
-
 }

@@ -17,7 +17,7 @@ private:
 	void CalculateBasisFunction();
 
 	void Discrete_Fourier_Transform(std::vector<float>& _IArray, std::vector<float>& _QArray);
-	void Cooley_Tukey_FFT(std::vector<std::complex<double>> _IQArray);
+	void Cooley_Tukey_FFT(std::vector<std::complex<double>>& _IQArray);
 
 	//Memoization(기저함수, DFT전용)
 	std::vector<std::vector<std::complex<double>>> BasisFunctionData;
