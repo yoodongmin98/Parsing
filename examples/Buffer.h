@@ -91,11 +91,7 @@ public:
 	//magnitude
 	inline const std::vector<float>& GetMDR_I_Mag()
 	{
-		return MDR_I_Mag;
-	}
-	inline const std::vector<float>& GetMDR_Q_Mag()
-	{
-		return MDR_Q_Mag;
+		return MDR_Mag;
 	}
 	//BinFreqSpeed
 	inline const std::vector<float>& GetMDR_BFS()
@@ -184,12 +180,11 @@ private:
 	std::vector<float> MDR_I_RFFT;
 	std::vector<float> MDR_Q_RFFT;
 
-	std::vector<float> MDR_I_Mag;
-	std::vector<float> MDR_Q_Mag;
+	std::vector<float> MDR_Mag;
 
 	std::vector<float> MDR_I_BinFreq;
 	
-	std::vector<float> MDR_I_Phase;
+	std::vector<float> MDR_I_Phase; //Phase도 I와Q를 합친 하나의 배열로 표현
 	std::vector<float> MDR_Q_Phase;
 
 	std::vector<float> MDR_I_Filter;

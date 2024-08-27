@@ -18,41 +18,29 @@ MyFFT::~MyFFT()
 }
 
 
-
-void MyFFT::Foward_FFT(std::vector<float>& _IArray, std::vector<float>& _QArray)
+void MyFFT::FFTInit(std::vector<float>& _IArray, std::vector<float>& _QArray)
 {
-	//FFT
-	try
+	for (auto i = 0; i < MDR_ADC_SampleSize; ++i)
 	{
-		for (auto i = 0; i < MDR_ADC_SampleSize; ++i)
-		{
-			// 복소수 객체를 생성하고 실수부와 허수부를 설정
-			CalculateArray[i] = std::complex<double>(_IArray[i], _QArray[i]);
-		}
-		if (_IArray.size() == _QArray.size())
-			Cooley_Tukey_FFT(CalculateArray);
-		else
-			throw;
-		for (auto i = 0; i < MDR_ADC_SampleSize; ++i)
-		{
-			// 복소수 객체를 생성하고 실수부와 허수부를 설정
-			_IArray[i] = CalculateArray[i].real();
-			_QArray[i] = CalculateArray[i].imag();
-		}
-		return;
-	}
-	catch (int n)
-	{
-		//DFT
-		Discrete_Fourier_Transform(_IArray, _QArray);
+		// 복소수 객체를 생성하고 실수부와 허수부를 설정
+		CalculateArray[i] = std::complex<double>(_IArray[i], _QArray[i]);
 	}
 }
 
 
-void MyFFT::Reverse_FFT(std::vector<float>& _IArray, std::vector<float>& _QArray)
+std::vector<std::complex<double>> MyFFT::Foward_FFT()
+{
+	//FFT
+	Cooley_Tukey_FFT(CalculateArray);
+	return CalculateArray;
+}
+
+
+std::vector<std::complex<double>> MyFFT::Reverse_FFT()
 {
 	/*if()*/ //FFT계산이 미리 들어와있지 않다면 MsgAssert
-	//Cooley_Tukey_FFT(CalculateArray);
+	Cooley_Tukey_FFT(CalculateArray, 1);
+	return CalculateArray;
 }
 
 
@@ -108,9 +96,10 @@ void MyFFT::Discrete_Fourier_Transform(std::vector<float>& _IArray, std::vector<
 }
 
 
-void MyFFT::Cooley_Tukey_FFT(std::vector<std::complex<double>>& _IQArray)
+void MyFFT::Cooley_Tukey_FFT(std::vector<std::complex<double>>& _IQArray, bool Inverse)
 {
 	int Size = _IQArray.size();
+	float Dot = -2.0;
 	if (Size <= 1)
 		return;
 
@@ -129,12 +118,23 @@ void MyFFT::Cooley_Tukey_FFT(std::vector<std::complex<double>>& _IQArray)
 	Cooley_Tukey_FFT(even);
 	Cooley_Tukey_FFT(odd);
 
+	if (Inverse)
+		Dot = 2.0;
+
 	// 기저함수를 계산하여 결과 병합
 	for (int k = 0; k < Size / 2; ++k)
 	{
 		//홀수 idx에 대한 기저함수 내적을 미리 구함
-		std::complex<double> t = std::polar(1.0, -2.0 * PI * k / Size) * odd[k];
+		std::complex<double> t = std::polar(1.0, Dot * PI * k / Size) * odd[k];
 		_IQArray[k] = even[k] + t;
 		_IQArray[k + Size / 2] = even[k] - t;
+	}
+
+	if (_IQArray.size() == MDR_ADC_SampleSize && Inverse)
+	{
+		for (auto i = 0; i < MDR_ADC_SampleSize; ++i)
+		{
+			_IQArray[i] /= MDR_ADC_SampleSize;
+		}
 	}
 }

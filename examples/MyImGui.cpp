@@ -352,8 +352,10 @@ void MyImGui::CoreStartAndGraphDebug(int argc, char** argv)
 			RFFT_Q = Buffer::Buffers->GetMDR_Q_RFFT();
 			if (ImPlot::BeginPlot("RFFT I,Q Data", "Index", "Value(x100)", ImVec2(500, 300), ImPlotFlags_None))
 			{
+				/*ImPlot::SetupAxisLimits(ImAxis_X1, -100, 1024);
+				ImPlot::SetupAxisLimits(ImAxis_Y1, -30000, 40000);*/
 				ImPlot::SetupAxisLimits(ImAxis_X1, -100, 1024);
-				ImPlot::SetupAxisLimits(ImAxis_Y1, -30000, 40000);
+				ImPlot::SetupAxisLimits(ImAxis_Y1, -300, 400);
 				ImPlot::PlotLine("I Data", RFFT_I.data(), (int)RFFT_I.size());
 				ImPlot::PlotLine("Q Data", RFFT_Q.data(), (int)RFFT_Q.size());
 				ImPlot::EndPlot();
@@ -371,13 +373,13 @@ void MyImGui::CoreStartAndGraphDebug(int argc, char** argv)
 	/////																							/////
 			ImGui::Begin("CalCulate Window8");
 			MAG_I = Buffer::Buffers->GetMDR_I_Mag();
-			MAG_Q = Buffer::Buffers->GetMDR_Q_Mag();
 			if (ImPlot::BeginPlot("Magnitude I,Q Data", "Index", "Value(x100)", ImVec2(500, 300), ImPlotFlags_None))
 			{
-				ImPlot::SetupAxisLimits(ImAxis_X1, -100, 1024);
-				ImPlot::SetupAxisLimits(ImAxis_Y1, -10000, 60000);
+			/*	ImPlot::SetupAxisLimits(ImAxis_X1, -100, 550);
+				ImPlot::SetupAxisLimits(ImAxis_Y1, -10000, 60000);*/
+				ImPlot::SetupAxisLimits(ImAxis_X1, -100, 512);
+				ImPlot::SetupAxisLimits(ImAxis_Y1, -300, 400);
 				ImPlot::PlotLine("I Data", MAG_I.data(), (int)MAG_I.size());
-				ImPlot::PlotLine("Q Data", MAG_Q.data(), (int)MAG_Q.size());
 				ImPlot::EndPlot();
 			}
 			ImGui::End();
@@ -393,11 +395,13 @@ void MyImGui::CoreStartAndGraphDebug(int argc, char** argv)
 	/////																							/////
 			ImGui::Begin("CalCulate Window9");
 			BFS_I = Buffer::Buffers->GetMDR_BFS();
-			MAG_Q = Buffer::Buffers->GetMDR_Q_Mag();
+			//MAG_Q = Buffer::Buffers->GetMDR_Q_Mag();
 			if (ImPlot::BeginPlot("Bin Freq Speed I,Q Data", "Index", "Value(x100)", ImVec2(500, 300), ImPlotFlags_None))
 			{
+				/*ImPlot::SetupAxisLimits(ImAxis_X1, -100, 1024);
+				ImPlot::SetupAxisLimits(ImAxis_Y1, -10000, 60000);*/
 				ImPlot::SetupAxisLimits(ImAxis_X1, -100, 1024);
-				ImPlot::SetupAxisLimits(ImAxis_Y1, -10000, 60000);
+				ImPlot::SetupAxisLimits(ImAxis_Y1, -300, 400);
 				ImPlot::PlotLine("I Data", BFS_I.data(), (int)BFS_I.size());
 				ImPlot::PlotLine("Q Data", MAG_Q.data(), (int)MAG_Q.size());
 				ImPlot::EndPlot();

@@ -18,8 +18,8 @@ Buffer::Buffer()
 	D_SimpleResult = std::make_shared<DopplerSimpleResult>();
 	AdcFilters = std::make_shared<AdcFilter>();
 	MyFFTs = std::make_shared<MyFFT>();
-	MDR_I_Mag.resize(MDR_ADC_SampleSize / 2);
-	MDR_Q_Mag.resize(MDR_ADC_SampleSize / 2);
+	MDR_Mag.resize(MDR_ADC_SampleSize / 2);
+
 }
 
 Buffer::~Buffer()
@@ -144,7 +144,14 @@ void Buffer::FastFurierTransform(int Reverse)
 		//}
 		MDR_I_FFT = MDR_I_Window;
 		MDR_Q_FFT = MDR_Q_Window;
-		MyFFTs->Foward_FFT(MDR_I_FFT, MDR_Q_FFT);
+
+		MyFFTs->FFTInit(MDR_I_FFT, MDR_Q_FFT);
+		std::vector<std::complex<double>> Result = MyFFTs->Foward_FFT();
+		for (auto i = 0; i < MDR_ADC_SampleSize; ++i)
+		{
+			MDR_I_FFT[i] = Result[i].real();
+			MDR_Q_FFT[i] = Result[i].imag();
+		}
 	}
 	else
 	{
@@ -153,22 +160,33 @@ void Buffer::FastFurierTransform(int Reverse)
 			MDR_I_RFFT.clear();
 			MDR_Q_RFFT.clear();
 		}
-		std::vector<kiss_fft_cpx> input(MDR_ADC_SampleSize);
-		std::vector<kiss_fft_cpx> output(MDR_ADC_SampleSize);
 
-		kiss_fft_cfg cfg = kiss_fft_alloc(MDR_ADC_SampleSize, 1, nullptr, nullptr);  // 1이 reverse
-		for (int i = 0; i < MDR_ADC_SampleSize; ++i)
+		MDR_I_RFFT = MDR_I_HLCUT;
+		MDR_Q_RFFT = MDR_Q_HLCUT;
+
+		MyFFTs->FFTInit(MDR_I_RFFT, MDR_Q_RFFT);
+		std::vector<std::complex<double>> Result = MyFFTs->Reverse_FFT();
+		for (auto i = 0; i < MDR_ADC_SampleSize; ++i)
 		{
-			input[i].r = MDR_I_HLCUT[i];  // 실수부에 I 데이터 설정
-			input[i].i = MDR_Q_HLCUT[i];  // 이하 동문
+			MDR_I_RFFT[i] = Result[i].real();
+			MDR_Q_RFFT[i] = Result[i].imag();
 		}
-		kiss_fft(cfg, input.data(), output.data());
-		for (int j = 0; j < MDR_ADC_SampleSize; ++j)
-		{
-			//일단 덮어쓰기
-			MDR_I_RFFT.emplace_back(output[j].r);
-			MDR_Q_RFFT.emplace_back(output[j].i);
-		}
+		//std::vector<kiss_fft_cpx> input(MDR_ADC_SampleSize);
+		//std::vector<kiss_fft_cpx> output(MDR_ADC_SampleSize);
+
+		//kiss_fft_cfg cfg = kiss_fft_alloc(MDR_ADC_SampleSize, 1, nullptr, nullptr);  // 1이 reverse
+		//for (int i = 0; i < MDR_ADC_SampleSize; ++i)
+		//{
+		//	input[i].r = MDR_I_HLCUT[i];  // 실수부에 I 데이터 설정
+		//	input[i].i = MDR_Q_HLCUT[i];  // 이하 동문
+		//}
+		//kiss_fft(cfg, input.data(), output.data());
+		//for (int j = 0; j < MDR_ADC_SampleSize; ++j)
+		//{
+		//	//일단 덮어쓰기
+		//	MDR_I_RFFT.emplace_back(output[j].r);
+		//	MDR_Q_RFFT.emplace_back(output[j].i);
+		//}
 	}
 	return;
 }
@@ -212,63 +230,69 @@ void Buffer::HighLowCut()
 	}
 	MDR_I_HLCUT = MDR_I_DCPOINT;
 	MDR_Q_HLCUT = MDR_Q_DCPOINT;
-	//Low Cut
-	if (MDRRadar_Datas->FreqLowCutEnable)
-	{
-		std::fill(MDR_I_HLCUT.begin(), MDR_I_HLCUT.begin() + (uint16_t)(MDRRadar_Datas->FreqLowCut / D_SimpleResult->FreqByBin + 1) * 2, 0.0f);
-		std::fill(MDR_Q_HLCUT.begin(), MDR_Q_HLCUT.begin() + (uint16_t)(MDRRadar_Datas->FreqLowCut / D_SimpleResult->FreqByBin + 1) * 2, 0.0f);
-	}
+	////Low Cut
+	//if (MDRRadar_Datas->FreqLowCutEnable)
+	//{
+	//	std::fill(MDR_I_HLCUT.begin(), MDR_I_HLCUT.begin() + (uint16_t)(MDRRadar_Datas->FreqLowCut / D_SimpleResult->FreqByBin + 1) * 2, 0.0f);
+	//	std::fill(MDR_Q_HLCUT.begin(), MDR_Q_HLCUT.begin() + (uint16_t)(MDRRadar_Datas->FreqLowCut / D_SimpleResult->FreqByBin + 1) * 2, 0.0f);
+	//}
 
-	// High Cut
-	if (MDRRadar_Datas->FreqHighCutEnable)
-	{
-		std::fill(MDR_I_HLCUT.begin() + (uint16_t)(MDRRadar_Datas->FreqHighCut / D_SimpleResult->FreqByBin + 1) * 2,
-			MDR_I_HLCUT.begin() + MDR_I_HLCUT.size(),
-			0.0f);
-		std::fill(MDR_Q_HLCUT.begin() + (uint16_t)(MDRRadar_Datas->FreqHighCut / D_SimpleResult->FreqByBin + 1) * 2,
-			MDR_Q_HLCUT.begin() + MDR_Q_HLCUT.size(),
-			0.0f);
-	}
+	//// High Cut
+	//if (MDRRadar_Datas->FreqHighCutEnable)
+	//{
+	//	std::fill(MDR_I_HLCUT.begin() + (uint16_t)(MDRRadar_Datas->FreqHighCut / D_SimpleResult->FreqByBin + 1) * 2,
+	//		MDR_I_HLCUT.begin() + MDR_I_HLCUT.size(),
+	//		0.0f);
+	//	std::fill(MDR_Q_HLCUT.begin() + (uint16_t)(MDRRadar_Datas->FreqHighCut / D_SimpleResult->FreqByBin + 1) * 2,
+	//		MDR_Q_HLCUT.begin() + MDR_Q_HLCUT.size(),
+	//		0.0f);
+	//}
+	/*std::fill(MDR_Q_HLCUT.begin() + MDR_Q_HLCUT.size()/2,
+		MDR_Q_HLCUT.begin() + MDR_Q_HLCUT.size(),
+		0.0f);
+	std::fill(MDR_I_HLCUT.begin() + MDR_I_HLCUT.size() / 2,
+		MDR_I_HLCUT.begin() + MDR_I_HLCUT.size(),
+		0.0f);*/
 }
 
 
 void Buffer::CalculateMagnitude() 
 {
-	if (!MDR_I_Mag.empty() || !MDR_Q_Mag.empty())
+	//크기 구하기
+	if (!MDR_Mag.empty())
 	{
-		MDR_I_Mag.clear();
-		MDR_Q_Mag.clear();
-		MDR_I_Mag.resize(MDR_ADC_SampleSize / 2);
-		MDR_Q_Mag.resize(MDR_ADC_SampleSize / 2);
+		MDR_Mag.clear();
+		MDR_Mag.resize(MDR_ADC_SampleSize / 2);
 	}
 	for (int i = 0; i < MDR_ADC_SampleSize/2; i++) {
-		float real = MDR_I_RFFT[2 * i];       // 실수부
-		float imag = MDR_I_RFFT[2 * i + 1];   // 허수부
-		MDR_I_Mag[i] = sqrtf(real * real + imag * imag);
-	}
-	for (int j = 0; j < MDR_ADC_SampleSize / 2; j++) {
-		float real = MDR_Q_RFFT[2 * j];       // 실수부
-		float imag = MDR_Q_RFFT[2 * j + 1];   // 허수부
-		MDR_Q_Mag[j] = sqrtf(real * real + imag * imag);
+		float real = MDR_I_RFFT[i];   // 실수부
+		float imag = MDR_Q_RFFT[i];   // 허수부
+		MDR_Mag[i] = sqrtf(real * real + imag * imag);
 	}
 }
 
 
-void Buffer::BinFreqSpeedCalculate()
+void Buffer::BinFreqSpeedCalculate() //??
 {
 	if (!MDR_I_BinFreq.empty())
 	{
 		MDR_I_BinFreq.clear();
 	}
-	MDR_I_BinFreq = MDR_I_Mag;
+	MDR_I_BinFreq = MDR_Mag;
 
 	for (auto i = 0; i < DopplerObjectNum; ++i)
 	{
 		auto maxIter = max_element(MDR_I_BinFreq.begin(), MDR_I_BinFreq.end());
+		//최대 값 담기
 		D_SimpleResult->Value[i] = *maxIter;
+		//최대 값의 idx
  		D_SimpleResult->Bin[i] = distance(MDR_I_BinFreq.begin(), maxIter);
+		//그 값을 0으로 만듬
 		MDR_I_BinFreq[D_SimpleResult->Bin[i]] = 0;
+
+		//주파수 구하기
 		D_SimpleResult->Freq[i] = D_SimpleResult->FreqByBin * D_SimpleResult->Bin[i];
+		//속도 구하기
 		D_SimpleResult->Speed[i] = D_SimpleResult->Freq[i] / D_SimpleResult->Freq_1Kmh;
 	}
 }
@@ -285,7 +309,7 @@ void Buffer::Phase()
 	MDR_Q_Phase = MDR_Q_RFFT;
 	for (auto i = 0; i < DopplerObjectNum; ++i)
 	{
-		D_SimpleResult->PhaseRadian_I[i] = atan2f(MDR_I_Phase[D_SimpleResult->Bin[i] * 2 + 1], MDR_I_Phase[D_SimpleResult->Bin[i] * 2]);
+		D_SimpleResult->PhaseRadian_I[i] = atan2f(MDR_I_Phase[D_SimpleResult->Bin[i] * 2 + 1], MDR_I_Phase[D_SimpleResult->Bin[i] * 2]); //복소수 형태로 표현
 		D_SimpleResult->PhaseRadian_Q[i] = atan2f(MDR_Q_Phase[D_SimpleResult->Bin[i] * 2 + 1], MDR_Q_Phase[D_SimpleResult->Bin[i] * 2]);
 
 		//Phase예각 구하기
