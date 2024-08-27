@@ -187,12 +187,14 @@ void Buffer::Kill_DC_POINT()
 	MDR_I_DCPOINT = MDR_I_FFT;
 	MDR_Q_DCPOINT = MDR_Q_FFT;
 	//Kill DC
+	//무언가 조건에 의해서 DC성분을 제거하는거같은데
 	std::fill(MDR_I_DCPOINT.begin(), MDR_I_DCPOINT.begin() + 8, 0.0f);
 	std::fill(MDR_Q_DCPOINT.begin(), MDR_Q_DCPOINT.begin() + 8, 0.0f);
 
 	//Kill Point
 	if (MDRRadar_Datas->FreqPointCutEnable)
 	{
+		//얘는 기본값만 가지고있고, 변하는 기준을 모르니 일단 패스
 		int i = MDRRadar_Datas->FreqPointCut;
 		std::fill(MDR_I_DCPOINT.begin() + i, MDR_I_DCPOINT.begin() + i + 12, 0.0f);
 		std::fill(MDR_Q_DCPOINT.begin() + i, MDR_Q_DCPOINT.begin() + i + 12, 0.0f);
@@ -202,6 +204,7 @@ void Buffer::Kill_DC_POINT()
 
 void Buffer::HighLowCut()
 {
+	//원하는 주파수의 성분만 남기는것.(어차피 대칭되는 데이터이므로 한쪽만 사용하겠다는거)
 	if (!MDR_I_HLCUT.empty() || !MDR_Q_HLCUT.empty())
 	{
 		MDR_I_HLCUT.clear();

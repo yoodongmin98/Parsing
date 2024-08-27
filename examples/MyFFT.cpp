@@ -107,7 +107,7 @@ void MyFFT::Discrete_Fourier_Transform(std::vector<float>& _IArray, std::vector<
 	_QArray = QResult;
 }
 
-//bool값 추가로 reverse판별(나중에)
+
 void MyFFT::Cooley_Tukey_FFT(std::vector<std::complex<double>>& _IQArray)
 {
 	int Size = _IQArray.size();
