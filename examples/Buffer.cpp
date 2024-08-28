@@ -272,6 +272,9 @@ void Buffer::CalculateMagnitude()
 }
 
 
+
+
+/// 세상 사람들!! 유동민이 여기서부터 해야한다고!!! 누가 좀!!!! 알려주세요!!!
 void Buffer::BinFreqSpeedCalculate() 
 {
 	if (!MDR_I_BinFreq.empty())
@@ -292,7 +295,7 @@ void Buffer::BinFreqSpeedCalculate()
 
 		//주파수 구하기
 		D_SimpleResult->Freq[i] = D_SimpleResult->FreqByBin * D_SimpleResult->Bin[i];
-		//속도 구하기
+		//주파수를 이용한 속도 구하기
 		D_SimpleResult->Speed[i] = D_SimpleResult->Freq[i] / D_SimpleResult->Freq_1Kmh;
 	}
 }

@@ -21,6 +21,7 @@ Core::~Core()
 
 void Core::Start(int argc, char** argv)
 {
+	//Test¿ë mini data module
 	port = "COM4";
 	baud = 921600;
 
