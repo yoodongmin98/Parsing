@@ -58,7 +58,7 @@ private:
 	float	FreqHighCut = 2300.0f;
 	uint32_t	FreqHighCutEnable = 1;		// ON:0x01, OFF:0x00
 	uint32_t	GPIO_Mode;					// Default:0x00, Mode1:0x01
-	uint32_t	FreqPointCut = 24;
+	uint32_t	FreqPointCut = 24;			
 	uint32_t	FreqPointCutEnable = 1;		// ON:0x01, OFF:0x00
 	uint32_t	Algorithm;					// (Integral 0, Variance 1);
 	uint32_t	GPIO_DirectionHoldingNum;	// Default:8
@@ -72,18 +72,18 @@ public:
 	friend Buffer;
 private:
 	float
-		FreqByBin = 9.765625f,
+		FreqByBin = 9.765625f, 
 		Freq_1Kmh = 44.72222222222216f;
 	uint32_t
 		BiausBin = 1,
 		CalcBinNums = 500;
 	uint32_t
-		Bin[DopplerObjectNum];
+		Bin[DopplerObjectNum]; 
 	float
 		Speed[DopplerObjectNum];
 	float
 		Value[DopplerObjectNum],
-		Freq[DopplerObjectNum],
+		Freq[DopplerObjectNum], 
 		PhaseRadian_I[DopplerObjectNum],
 		PhaseRadian_Q[DopplerObjectNum],
 		PhaseRadianDiff[DopplerObjectNum];

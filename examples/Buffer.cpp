@@ -230,23 +230,23 @@ void Buffer::HighLowCut()
 	}
 	MDR_I_HLCUT = MDR_I_DCPOINT;
 	MDR_Q_HLCUT = MDR_Q_DCPOINT;
-	////Low Cut
-	//if (MDRRadar_Datas->FreqLowCutEnable)
-	//{
-	//	std::fill(MDR_I_HLCUT.begin(), MDR_I_HLCUT.begin() + (uint16_t)(MDRRadar_Datas->FreqLowCut / D_SimpleResult->FreqByBin + 1) * 2, 0.0f);
-	//	std::fill(MDR_Q_HLCUT.begin(), MDR_Q_HLCUT.begin() + (uint16_t)(MDRRadar_Datas->FreqLowCut / D_SimpleResult->FreqByBin + 1) * 2, 0.0f);
-	//}
+	//Low Cut
+	if (MDRRadar_Datas->FreqLowCutEnable)
+	{
+		std::fill(MDR_I_HLCUT.begin(), MDR_I_HLCUT.begin() + (uint16_t)(MDRRadar_Datas->FreqLowCut / D_SimpleResult->FreqByBin + 1) * 2, 0.0f);
+		std::fill(MDR_Q_HLCUT.begin(), MDR_Q_HLCUT.begin() + (uint16_t)(MDRRadar_Datas->FreqLowCut / D_SimpleResult->FreqByBin + 1) * 2, 0.0f);
+	}
 
-	//// High Cut
-	//if (MDRRadar_Datas->FreqHighCutEnable)
-	//{
-	//	std::fill(MDR_I_HLCUT.begin() + (uint16_t)(MDRRadar_Datas->FreqHighCut / D_SimpleResult->FreqByBin + 1) * 2,
-	//		MDR_I_HLCUT.begin() + MDR_I_HLCUT.size(),
-	//		0.0f);
-	//	std::fill(MDR_Q_HLCUT.begin() + (uint16_t)(MDRRadar_Datas->FreqHighCut / D_SimpleResult->FreqByBin + 1) * 2,
-	//		MDR_Q_HLCUT.begin() + MDR_Q_HLCUT.size(),
-	//		0.0f);
-	//}
+	// High Cut
+	if (MDRRadar_Datas->FreqHighCutEnable)
+	{
+		std::fill(MDR_I_HLCUT.begin() + (uint16_t)(MDRRadar_Datas->FreqHighCut / D_SimpleResult->FreqByBin + 1) * 2,
+			MDR_I_HLCUT.begin() + MDR_I_HLCUT.size(),
+			0.0f);
+		std::fill(MDR_Q_HLCUT.begin() + (uint16_t)(MDRRadar_Datas->FreqHighCut / D_SimpleResult->FreqByBin + 1) * 2,
+			MDR_Q_HLCUT.begin() + MDR_Q_HLCUT.size(),
+			0.0f);
+	}
 	/*std::fill(MDR_Q_HLCUT.begin() + MDR_Q_HLCUT.size()/2,
 		MDR_Q_HLCUT.begin() + MDR_Q_HLCUT.size(),
 		0.0f);
@@ -272,7 +272,7 @@ void Buffer::CalculateMagnitude()
 }
 
 
-void Buffer::BinFreqSpeedCalculate() //??
+void Buffer::BinFreqSpeedCalculate() 
 {
 	if (!MDR_I_BinFreq.empty())
 	{
@@ -282,7 +282,7 @@ void Buffer::BinFreqSpeedCalculate() //??
 
 	for (auto i = 0; i < DopplerObjectNum; ++i)
 	{
-		auto maxIter = max_element(MDR_I_BinFreq.begin(), MDR_I_BinFreq.end());
+		auto maxIter = max_element(MDR_I_BinFreq.begin(), MDR_I_BinFreq.end()); //가장 큰 주파수 값 
 		//최대 값 담기
 		D_SimpleResult->Value[i] = *maxIter;
 		//최대 값의 idx
