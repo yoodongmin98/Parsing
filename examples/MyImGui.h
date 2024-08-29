@@ -66,17 +66,11 @@ private:
 	std::vector<float> RFFT_I;
 	std::vector<float> RFFT_Q;
 
-	std::vector<float> MAG_I;
-	std::vector<float> MAG_Q;
 
+	//Calculate
+	std::vector<float> MAG;
+	std::vector<float> Freq;
 	std::vector<float> Speed;
 
-	std::vector<float> Filter_I;
-	std::vector<float> Filter_Q;
-
-	std::vector<float> LPF_I;
-	std::vector<float> LPF_Q;
-
-	std::vector<float> Scale_I;
-	std::vector<float> Scale_Q;
+	
 };

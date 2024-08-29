@@ -289,101 +289,100 @@ void Buffer::BinFreqSpeedCalculate()
 		//최대 값 담기
 		D_SimpleResult->Value[i] = *maxIter;
 		//최대 값의 idx
- 		D_SimpleResult->Bin[i] = distance(MDR_I_BinFreq.begin(), maxIter);
+ 		D_SimpleResult->Bin[i] = (distance(MDR_I_BinFreq.begin(), maxIter)+1);
 		//그 값을 0으로 만듬
-		MDR_I_BinFreq[D_SimpleResult->Bin[i]] = 0;
+		MDR_I_BinFreq[(D_SimpleResult->Bin[i]-1)] = 0;
 
-		//주파수 구하기
+		//주파수 구하기 ????????????????????????????????
 		D_SimpleResult->Freq[i] = D_SimpleResult->FreqByBin * D_SimpleResult->Bin[i];
 		//주파수를 이용한 속도 구하기
-		D_SimpleResult->Speed[i] = D_SimpleResult->Freq[i] / D_SimpleResult->Freq_1Kmh;
-		//왜 안나오는데 왜 안나오는데 왜 안나오는데 왜 안나오는데 왜안앏덛ㄹ
+		D_SimpleResult->Speed[i] = D_SimpleResult->Freq[i] / (D_SimpleResult->Freq_1Kmh);
 	}
 }
 
 
 void Buffer::Phase()
 {
-	if (!MDR_I_Phase.empty() || !MDR_Q_Phase.empty())
-	{
-		MDR_I_Phase.clear();
-		MDR_Q_Phase.clear();
-	}
-	MDR_I_Phase = MDR_I_RFFT;
-	MDR_Q_Phase = MDR_Q_RFFT;
-	for (auto i = 0; i < DopplerObjectNum; ++i)
-	{
-		D_SimpleResult->PhaseRadian_I[i] = atan2f(MDR_I_Phase[D_SimpleResult->Bin[i] * 2 + 1], MDR_I_Phase[D_SimpleResult->Bin[i] * 2]); //복소수 형태로 표현
-		D_SimpleResult->PhaseRadian_Q[i] = atan2f(MDR_Q_Phase[D_SimpleResult->Bin[i] * 2 + 1], MDR_Q_Phase[D_SimpleResult->Bin[i] * 2]);
+	//if (!MDR_I_Phase.empty() || !MDR_Q_Phase.empty())
+	//{
+	//	MDR_I_Phase.clear();
+	//	MDR_Q_Phase.clear();
+	//}
+	//MDR_I_Phase = MDR_I_RFFT;
+	//MDR_Q_Phase = MDR_Q_RFFT;
+	//for (auto i = 0; i < DopplerObjectNum; ++i)
+	//{
+	//	D_SimpleResult->PhaseRadian_I[i] = atan2f(MDR_I_Phase[D_SimpleResult->Bin[i] * 2 + 1], MDR_I_Phase[D_SimpleResult->Bin[i] * 2]); //복소수 형태로 표현
+	//	D_SimpleResult->PhaseRadian_Q[i] = atan2f(MDR_Q_Phase[D_SimpleResult->Bin[i] * 2 + 1], MDR_Q_Phase[D_SimpleResult->Bin[i] * 2]);
 
-		//Phase예각 구하기
-		if (D_SimpleResult->PhaseRadian_I[i] >= 0)
-		{
-			D_SimpleResult->PhaseRadianDiff[i] = D_SimpleResult->PhaseRadian_I[i] - D_SimpleResult->PhaseRadian_Q[i];
+	//	//Phase예각 구하기
+	//	if (D_SimpleResult->PhaseRadian_I[i] >= 0)
+	//	{
+	//		D_SimpleResult->PhaseRadianDiff[i] = D_SimpleResult->PhaseRadian_I[i] - D_SimpleResult->PhaseRadian_Q[i];
 
-			if (D_SimpleResult->PhaseRadianDiff[i] > PI)
-				D_SimpleResult->PhaseRadianDiff[i] -= (PI * 2);
-		}
-		else
-		{
-			D_SimpleResult->PhaseRadianDiff[i] = -(D_SimpleResult->PhaseRadian_Q[i] - D_SimpleResult->PhaseRadian_I[i]);
+	//		if (D_SimpleResult->PhaseRadianDiff[i] > PI)
+	//			D_SimpleResult->PhaseRadianDiff[i] -= (PI * 2);
+	//	}
+	//	else
+	//	{
+	//		D_SimpleResult->PhaseRadianDiff[i] = -(D_SimpleResult->PhaseRadian_Q[i] - D_SimpleResult->PhaseRadian_I[i]);
 
-			if (D_SimpleResult->PhaseRadianDiff[i] < -PI)
-				D_SimpleResult->PhaseRadianDiff[i] += (PI * 2);
-		}
-		// PhaseDegree 구하기
-		D_SimpleResult->PhaseDegree_I[i] = (int32_t)(D_SimpleResult->PhaseRadian_I[i] * 180 / PI);
-		D_SimpleResult->PhaseDegree_Q[i] = (int32_t)(D_SimpleResult->PhaseRadian_Q[i] * 180 / PI);
+	//		if (D_SimpleResult->PhaseRadianDiff[i] < -PI)
+	//			D_SimpleResult->PhaseRadianDiff[i] += (PI * 2);
+	//	}
+	//	// PhaseDegree 구하기
+	//	D_SimpleResult->PhaseDegree_I[i] = (int32_t)(D_SimpleResult->PhaseRadian_I[i] * 180 / PI);
+	//	D_SimpleResult->PhaseDegree_Q[i] = (int32_t)(D_SimpleResult->PhaseRadian_Q[i] * 180 / PI);
 
-		// PhaseDegreeDiff 구하기
-		if (D_SimpleResult->PhaseDegree_I[i] >= 0)
-		{
-			D_SimpleResult->PhaseDegreeDiff[i] = D_SimpleResult->PhaseDegree_I[i] - D_SimpleResult->PhaseDegree_Q[i];
+	//	// PhaseDegreeDiff 구하기
+	//	if (D_SimpleResult->PhaseDegree_I[i] >= 0)
+	//	{
+	//		D_SimpleResult->PhaseDegreeDiff[i] = D_SimpleResult->PhaseDegree_I[i] - D_SimpleResult->PhaseDegree_Q[i];
 
-			if (D_SimpleResult->PhaseDegreeDiff[i] > 180)
-				D_SimpleResult->PhaseDegreeDiff[i] -= 360;
-		}
-		else
-		{
-			D_SimpleResult->PhaseDegreeDiff[i] = -(D_SimpleResult->PhaseDegree_Q[i] - D_SimpleResult->PhaseDegree_I[i]);
+	//		if (D_SimpleResult->PhaseDegreeDiff[i] > 180)
+	//			D_SimpleResult->PhaseDegreeDiff[i] -= 360;
+	//	}
+	//	else
+	//	{
+	//		D_SimpleResult->PhaseDegreeDiff[i] = -(D_SimpleResult->PhaseDegree_Q[i] - D_SimpleResult->PhaseDegree_I[i]);
 
-			if (D_SimpleResult->PhaseDegreeDiff[i] < -180)
-				D_SimpleResult->PhaseDegreeDiff[i] += 360;
-		}
-		// Direction 구하기
-		if (D_SimpleResult->PhaseDegreeDiff[i] > 70 && D_SimpleResult->PhaseDegreeDiff[i] < 110)
-			D_SimpleResult->Direction[i] = EnumDirection::Faraway;
-		else if (D_SimpleResult->PhaseDegreeDiff[i] < -70 && D_SimpleResult->PhaseDegreeDiff[i] > -110)
-			D_SimpleResult->Direction[i] = EnumDirection::Oncoming;
-		else
-			D_SimpleResult->Direction[i] = EnumDirection::Unknown;
-	}
-
-
-	// Accuracy 계산
-	MDRRadar_Datas->Accuracy = 0;
-	for (uint8_t i = 0; i < DopplerObjectNum; i++)
-		MDRRadar_Datas->Accuracy += static_cast<int>(D_SimpleResult->Direction[i]);
-
-	// 평균속도 구하기
-	MDRRadar_Datas->Speed = 0;
-	for (uint8_t idx = 0; idx < 4; idx++)
-		MDRRadar_Datas->Speed += D_SimpleResult->Speed[idx];
-
-	if (MDRRadar_Datas->Accuracy > 0)
-		MDRRadar_Datas->Speed /= 4.f;
-	else if (MDRRadar_Datas->Accuracy < 0)
-		MDRRadar_Datas->Speed /= -4.f;
-	else
-		MDRRadar_Datas->Speed = 0;
+	//		if (D_SimpleResult->PhaseDegreeDiff[i] < -180)
+	//			D_SimpleResult->PhaseDegreeDiff[i] += 360;
+	//	}
+	//	// Direction 구하기
+	//	if (D_SimpleResult->PhaseDegreeDiff[i] > 70 && D_SimpleResult->PhaseDegreeDiff[i] < 110)
+	//		D_SimpleResult->Direction[i] = EnumDirection::Faraway;
+	//	else if (D_SimpleResult->PhaseDegreeDiff[i] < -70 && D_SimpleResult->PhaseDegreeDiff[i] > -110)
+	//		D_SimpleResult->Direction[i] = EnumDirection::Oncoming;
+	//	else
+	//		D_SimpleResult->Direction[i] = EnumDirection::Unknown;
+	//}
 
 
-	// Speed에 방향적용
-	for (uint16_t i = 0; i < DopplerObjectNum; i++)
-	{
-		D_SimpleResult->Direction[i] == EnumDirection::Oncoming ? D_SimpleResult->Speed[i] *= -1 : 1;
-		D_SimpleResult->Direction[i] == EnumDirection::Unknown ? D_SimpleResult->Speed[i] *= 0 : 1;
-	}
+	//// Accuracy 계산
+	//MDRRadar_Datas->Accuracy = 0;
+	//for (uint8_t i = 0; i < DopplerObjectNum; i++)
+	//	MDRRadar_Datas->Accuracy += static_cast<int>(D_SimpleResult->Direction[i]);
+
+	//// 평균속도 구하기
+	//MDRRadar_Datas->Speed = 0;
+	//for (uint8_t idx = 0; idx < 4; idx++)
+	//	MDRRadar_Datas->Speed += D_SimpleResult->Speed[idx];
+
+	//if (MDRRadar_Datas->Accuracy > 0)
+	//	MDRRadar_Datas->Speed /= 4.f;
+	//else if (MDRRadar_Datas->Accuracy < 0)
+	//	MDRRadar_Datas->Speed /= -4.f;
+	//else
+	//	MDRRadar_Datas->Speed = 0;
+
+
+	//// Speed에 방향적용
+	//for (uint16_t i = 0; i < DopplerObjectNum; i++)
+	//{
+	//	D_SimpleResult->Direction[i] == EnumDirection::Oncoming ? D_SimpleResult->Speed[i] *= -1 : 1;
+	//	D_SimpleResult->Direction[i] == EnumDirection::Unknown ? D_SimpleResult->Speed[i] *= 0 : 1;
+	//}
 }
 
 

@@ -372,14 +372,12 @@ void MyImGui::CoreStartAndGraphDebug(int argc, char** argv)
 	/////					Magnitude I, Q															/////
 	/////																							/////
 			ImGui::Begin("CalCulate Window8");
-			MAG_I = Buffer::Buffers->GetMDR_I_Mag();
+			MAG = Buffer::Buffers->GetMDR_I_Mag();
 			if (ImPlot::BeginPlot("Magnitude I,Q Data", "Index", "Value(x100)", ImVec2(500, 300), ImPlotFlags_None))
 			{
-			/*	ImPlot::SetupAxisLimits(ImAxis_X1, -100, 550);
-				ImPlot::SetupAxisLimits(ImAxis_Y1, -10000, 60000);*/
 				ImPlot::SetupAxisLimits(ImAxis_X1, -100, 512);
 				ImPlot::SetupAxisLimits(ImAxis_Y1, -300, 400);
-				ImPlot::PlotLine("I Data", MAG_I.data(), (int)MAG_I.size());
+				ImPlot::PlotLine("I Data", MAG.data(), (int)MAG.size());
 				ImPlot::EndPlot();
 			}
 			ImGui::End();
@@ -391,17 +389,39 @@ void MyImGui::CoreStartAndGraphDebug(int argc, char** argv)
 	/////////////////////////WindowStart/////////////////////////////////////////////////////////////////
 	/////																							/////
 	/////																							/////
-	/////					BFS	 I, Q			//여기 스피드													/////
+	/////							Speed		얘는 표로 표시하는게 아니라 숫자로 표시해야할듯			/////
 	/////																							/////
 			ImGui::Begin("CalCulate Window9");
 			Speed = Buffer::Buffers->GetDopplerSimpleResult()->Speed;
-			
-			//MAG_Q = Buffer::Buffers->GetMDR_Q_Mag();
-			if (ImPlot::BeginPlot("Bin Freq Speed I,Q Data", "Index", "Value(x100)", ImVec2(500, 300), ImPlotFlags_None))
+			float Value= std::accumulate(Speed.begin(), Speed.end(), 0) / Speed.size();
+			Speed.clear();
+			Speed.resize(20);
+			Speed[9] = Value;
+			if (ImPlot::BeginPlot("Speed Data", "Index", "Value(x100)", ImVec2(500, 300), ImPlotFlags_None))
 			{
 				ImPlot::SetupAxisLimits(ImAxis_X1, -5, 25);
-				ImPlot::SetupAxisLimits(ImAxis_Y1, -100, 200);
-				ImPlot::PlotLine("Speed Data", Speed.data(), (int)Speed.size());
+				ImPlot::SetupAxisLimits(ImAxis_Y1, -1, 5);
+				ImPlot::PlotBars("Speed Data", Speed.data(), (int)Speed.size());
+				ImPlot::EndPlot();
+			}
+			ImGui::End();
+	/////																							/////
+	/////																							/////	
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+	/////////////////////////WindowStart/////////////////////////////////////////////////////////////////
+	/////																							/////
+	/////																							/////
+	/////							Freq															/////
+	/////																							/////
+			ImGui::Begin("CalCulate Window10");
+			Freq = Buffer::Buffers->GetDopplerSimpleResult()->Freq;
+			if (ImPlot::BeginPlot("Freq Data", "Index", "Value(x100)", ImVec2(500, 300), ImPlotFlags_None))
+			{
+				ImPlot::SetupAxisLimits(ImAxis_X1, -3, 22);
+				ImPlot::SetupAxisLimits(ImAxis_Y1, -100, 6000);
+				ImPlot::PlotLine("Freq Data", Freq.data(), (int)Freq.size());
 				ImPlot::EndPlot();
 			}
 			ImGui::End();

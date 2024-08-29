@@ -72,6 +72,8 @@ public:
 	DopplerSimpleResult()
 	{
 		Speed.resize(DopplerObjectNum);
+		Value.resize(DopplerObjectNum);
+		Freq.resize(DopplerObjectNum);
 	}
 	friend Buffer;
 
@@ -81,12 +83,11 @@ public:
 	uint32_t
 		BiausBin = 1,
 		CalcBinNums = 500;
-	uint32_t
-		Bin[DopplerObjectNum]; 
+	uint32_t Bin[DopplerObjectNum]; 
 		std::vector<float> Speed;
+		std::vector<float> Value;
+		std::vector<float> Freq;
 	float
-		Value[DopplerObjectNum],
-		Freq[DopplerObjectNum], 
 		PhaseRadian_I[DopplerObjectNum],
 		PhaseRadian_Q[DopplerObjectNum],
 		PhaseRadianDiff[DopplerObjectNum];
