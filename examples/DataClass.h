@@ -69,8 +69,12 @@ private:
 class DopplerSimpleResult final
 {
 public:
+	DopplerSimpleResult()
+	{
+		Speed.resize(DopplerObjectNum);
+	}
 	friend Buffer;
-private:
+
 	float
 		FreqByBin = 9.765625f, // 1024 (샘플링 데이터 개수) / 1000 (샘플링 주파수)
 		Freq_1Kmh = 44.72222222222216f; // 주파수를 특정속도와 대응시키는 값 (mini 기준 avg값인 24.15 기준으로 계산된 값)
@@ -79,8 +83,7 @@ private:
 		CalcBinNums = 500;
 	uint32_t
 		Bin[DopplerObjectNum]; 
-	float
-		Speed[DopplerObjectNum];
+		std::vector<float> Speed;
 	float
 		Value[DopplerObjectNum],
 		Freq[DopplerObjectNum], 

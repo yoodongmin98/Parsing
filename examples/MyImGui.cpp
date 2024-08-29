@@ -1,12 +1,12 @@
 #include <vector>
-#include "MyImGui.h"
+#include <numeric>
 #include <algorithm>
 #include <random>
+#include "MyImGui.h"
 
 #include "Core.h"
 #include "Buffer.h"
-#include <numeric>
-
+#include "DataClass.h"
 
 
 MyImGui::MyImGui()
@@ -391,83 +391,17 @@ void MyImGui::CoreStartAndGraphDebug(int argc, char** argv)
 	/////////////////////////WindowStart/////////////////////////////////////////////////////////////////
 	/////																							/////
 	/////																							/////
-	/////					BFS	 I, Q																/////
+	/////					BFS	 I, Q			//여기 스피드													/////
 	/////																							/////
 			ImGui::Begin("CalCulate Window9");
-			BFS_I = Buffer::Buffers->GetMDR_BFS();
+			Speed = Buffer::Buffers->GetDopplerSimpleResult()->Speed;
+			
 			//MAG_Q = Buffer::Buffers->GetMDR_Q_Mag();
 			if (ImPlot::BeginPlot("Bin Freq Speed I,Q Data", "Index", "Value(x100)", ImVec2(500, 300), ImPlotFlags_None))
 			{
-				/*ImPlot::SetupAxisLimits(ImAxis_X1, -100, 1024);
-				ImPlot::SetupAxisLimits(ImAxis_Y1, -10000, 60000);*/
-				ImPlot::SetupAxisLimits(ImAxis_X1, -100, 1024);
-				ImPlot::SetupAxisLimits(ImAxis_Y1, -300, 400);
-				ImPlot::PlotLine("I Data", BFS_I.data(), (int)BFS_I.size());
-				ImPlot::PlotLine("Q Data", MAG_Q.data(), (int)MAG_Q.size());
-				ImPlot::EndPlot();
-			}
-			ImGui::End();
-	/////																							/////
-	/////																							/////	
-	/////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	/////////////////////////WindowStart/////////////////////////////////////////////////////////////////
-	/////																							/////
-	/////																							/////
-	/////					Filtering	 I, Q														/////
-	/////																							/////
-			ImGui::Begin("CalCulate Window10");
-			Filter_I = Buffer::Buffers->GetMDR_I_Filter();
-			Filter_Q = Buffer::Buffers->GetMDR_Q_Filter();
-			if (ImPlot::BeginPlot("Filter I,Q Data", "Index", "Value(x100)", ImVec2(500, 300), ImPlotFlags_None))
-			{
-				ImPlot::SetupAxisLimits(ImAxis_X1, -100, 1024);
-				ImPlot::SetupAxisLimits(ImAxis_Y1, -30000, 40000);
-				ImPlot::PlotLine("I Data", Filter_I.data(), (int)Filter_I.size());
-				ImPlot::PlotLine("Q Data", Filter_Q.data(), (int)Filter_Q.size());
-				ImPlot::EndPlot();
-			}
-			ImGui::End();
-	/////																							/////
-	/////																							/////	
-	/////////////////////////////////////////////////////////////////////////////////////////////////////
-	 
-	
-	/////////////////////////WindowStart/////////////////////////////////////////////////////////////////
-	/////																							/////
-	/////																							/////
-	/////					LPF	 I, Q																/////
-	/////																							/////
-			ImGui::Begin("CalCulate Window11");
-			LPF_I = Buffer::Buffers->GetMDR_I_LPF();
-			LPF_Q = Buffer::Buffers->GetMDR_Q_LPF();
-			if (ImPlot::BeginPlot("Realtime I,Q Power Data", "Index", "Value(x100)", ImVec2(500, 300), ImPlotFlags_None))
-			{
-				ImPlot::SetupAxisLimits(ImAxis_X1, -100, 1024);
-				ImPlot::SetupAxisLimits(ImAxis_Y1, -30000, 40000);
-				ImPlot::PlotLine("I Data", LPF_I.data(), (int)LPF_I.size());
-				ImPlot::PlotLine("Q Data", LPF_Q.data(), (int)LPF_Q.size());
-				ImPlot::EndPlot();
-			}
-			ImGui::End();
-	/////																							/////
-	/////																							/////	
-	/////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	/////////////////////////WindowStart/////////////////////////////////////////////////////////////////
-	/////																							/////
-	/////																							/////
-	/////					Scaling	 I, Q															/////
-	/////																							/////
-			ImGui::Begin("CalCulate Window12");
-			Scale_I = Buffer::Buffers->GetMDR_I_Scale();
-			Scale_Q = Buffer::Buffers->GetMDR_I_Scale();
-			if (ImPlot::BeginPlot("Scailing And Algorithm I,Q Data", "Index", "Value(x100)", ImVec2(500, 300), ImPlotFlags_None))
-			{
-				ImPlot::SetupAxisLimits(ImAxis_X1, -100, 1024);
-				ImPlot::SetupAxisLimits(ImAxis_Y1, -10000, 60000);
-				ImPlot::PlotLine("I Data", Scale_I.data(), (int)Scale_I.size());
-				ImPlot::PlotLine("Q Data", Scale_Q.data(), (int)Scale_Q.size());
+				ImPlot::SetupAxisLimits(ImAxis_X1, -5, 25);
+				ImPlot::SetupAxisLimits(ImAxis_Y1, -100, 200);
+				ImPlot::PlotLine("Speed Data", Speed.data(), (int)Speed.size());
 				ImPlot::EndPlot();
 			}
 			ImGui::End();

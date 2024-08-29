@@ -69,7 +69,7 @@ private:
 	std::vector<float> MAG_I;
 	std::vector<float> MAG_Q;
 
-	std::vector<float> BFS_I;
+	std::vector<float> Speed;
 
 	std::vector<float> Filter_I;
 	std::vector<float> Filter_Q;

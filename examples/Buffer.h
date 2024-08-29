@@ -20,7 +20,10 @@ public:
 	{
 		return Adc_raw_buf.size();
 	}
-
+	inline std::shared_ptr<DopplerSimpleResult> GetDopplerSimpleResult()
+	{
+		return D_SimpleResult;
+	}
 
 
 	//////////////////////Get Vector//////////////////////
