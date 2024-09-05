@@ -390,17 +390,14 @@ void MyImGui::CoreStartAndGraphDebug(int argc, char** argv)
 	/////																							/////
 	/////																							/////
 	/////							Speed		얘는 표로 표시하는게 아니라 숫자로 표시해야할듯			/////
-	/////																							/////
+	/////																							/////.
 			ImGui::Begin("CalCulate Window9");
 			Speed = Buffer::Buffers->GetDopplerSimpleResult()->Speed;
-			float Value= std::accumulate(Speed.begin(), Speed.end(), 0) / Speed.size();
-			Speed.clear();
-			Speed.resize(20);
-			Speed[9] = Value;
+			
 			if (ImPlot::BeginPlot("Speed Data", "Index", "Value(x100)", ImVec2(500, 300), ImPlotFlags_None))
 			{
 				ImPlot::SetupAxisLimits(ImAxis_X1, -5, 25);
-				ImPlot::SetupAxisLimits(ImAxis_Y1, -1, 5);
+				ImPlot::SetupAxisLimits(ImAxis_Y1, -100, 100);
 				ImPlot::PlotBars("Speed Data", Speed.data(), (int)Speed.size());
 				ImPlot::EndPlot();
 			}

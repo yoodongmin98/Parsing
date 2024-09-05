@@ -99,7 +99,7 @@ void MyFFT::Discrete_Fourier_Transform(std::vector<float>& _IArray, std::vector<
 void MyFFT::Cooley_Tukey_FFT(std::vector<std::complex<double>>& _IQArray, bool Inverse)
 {
 	int Size = _IQArray.size();
-	float Dot = -2.0;
+	float Dot = -1.0;
 	if (Size <= 1)
 		return;
 
@@ -119,7 +119,7 @@ void MyFFT::Cooley_Tukey_FFT(std::vector<std::complex<double>>& _IQArray, bool I
 	Cooley_Tukey_FFT(odd);
 
 	if (Inverse)
-		Dot = 2.0;
+		Dot = 1.0;
 
 	// 기저함수를 계산하여 결과 병합
 	for (int k = 0; k < Size / 2; ++k)
