@@ -6,6 +6,7 @@
 #include <d3d9.h>
 #include <tchar.h>
 #include "implot.h"  
+#include <queue>
 
 #include <iostream>
 #include <vector>
@@ -73,4 +74,16 @@ private:
 	std::vector<float> Speed;
 
 	
+
+
+
+
+	//Test
+	std::vector<int> MaxIndex;
+	std::vector<int> SpeedVector;
+	std::vector<int> SpeedVector2;
+	std::vector<int> SpeedVector3;
+	int MaxValue = 0;
+	int Count = 0;
+	bool TestBool = true;
 };

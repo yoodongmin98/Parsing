@@ -24,6 +24,10 @@ public:
 	{
 		return D_SimpleResult;
 	}
+	inline std::shared_ptr<MDRRadar_Data> GetMDRRader()
+	{
+		return MDRRadar_Datas;
+	}
 
 
 	//////////////////////Get Vector//////////////////////

@@ -112,7 +112,6 @@ void Buffer::WindowFunction()
 		MDR_I_Window[p] *= (MDR_ADC_SampleSize - p - 1) / Temp_Side_Idx;
 		MDR_Q_Window[p] *= (MDR_ADC_SampleSize - p - 1) / Temp_Side_Idx;
 	}
-	int DenugValue = 0;
 }
 
 
@@ -238,16 +237,16 @@ void Buffer::HighLowCut()
 		std::fill(MDR_Q_HLCUT.begin(), MDR_Q_HLCUT.begin() + (uint16_t)(MDRRadar_Datas->FreqLowCut / D_SimpleResult->FreqByBin + 1) * 2, 0.0f);
 	}
 
-	// High Cut
-	if (MDRRadar_Datas->FreqHighCutEnable)
-	{
-		std::fill(MDR_I_HLCUT.begin() + (uint16_t)(MDRRadar_Datas->FreqHighCut / D_SimpleResult->FreqByBin + 1) * 2,
-			MDR_I_HLCUT.begin() + MDR_I_HLCUT.size(),
-			0.0f);
-		std::fill(MDR_Q_HLCUT.begin() + (uint16_t)(MDRRadar_Datas->FreqHighCut / D_SimpleResult->FreqByBin + 1) * 2,
-			MDR_Q_HLCUT.begin() + MDR_Q_HLCUT.size(),
-			0.0f);
-	}
+	//// High Cut
+	//if (MDRRadar_Datas->FreqHighCutEnable)
+	//{
+	//	std::fill(MDR_I_HLCUT.begin() + (uint16_t)(MDRRadar_Datas->FreqHighCut / D_SimpleResult->FreqByBin + 1) * 2,
+	//		MDR_I_HLCUT.begin() + MDR_I_HLCUT.size(),
+	//		0.0f);
+	//	std::fill(MDR_Q_HLCUT.begin() + (uint16_t)(MDRRadar_Datas->FreqHighCut / D_SimpleResult->FreqByBin + 1) * 2,
+	//		MDR_Q_HLCUT.begin() + MDR_Q_HLCUT.size(),
+	//		0.0f);
+	//}
 	/*std::fill(MDR_Q_HLCUT.begin() + MDR_Q_HLCUT.size()/2,
 		MDR_Q_HLCUT.begin() + MDR_Q_HLCUT.size(),
 		0.0f);
@@ -263,13 +262,14 @@ void Buffer::CalculateMagnitude()
 	if (!MDR_Mag.empty())
 	{
 		MDR_Mag.clear();
-		MDR_Mag.resize(MDR_ADC_SampleSize / 2);
+		MDR_Mag.resize(MDR_ADC_SampleSize/2);
 	}
 	for (int i = 0; i < MDR_ADC_SampleSize/2; i++) {
 		float real = MDR_I_RFFT[i];   // 실수부
 		float imag = MDR_Q_RFFT[i];   // 허수부
 		MDR_Mag[i] = sqrtf(real * real + imag * imag);
 	}
+	int a = 0;
 }
 
 
@@ -282,6 +282,7 @@ void Buffer::BinFreqSpeedCalculate()
 	{
 		MDR_I_BinFreq.clear();
 	}
+	//Magnitude를 담고있는 512개짜리 배열
 	MDR_I_BinFreq = MDR_Mag;
 
 	for (int i = 0; i < DopplerObjectNum; ++i) {
@@ -296,12 +297,15 @@ void Buffer::BinFreqSpeedCalculate()
 		// 해당 Bin의 Magnitude 값을 0으로 설정
 		MDR_I_BinFreq[maxIndex] = 0;
 
-		// 주파수 계산
-		D_SimpleResult->Freq[i] = D_SimpleResult->FreqByBin * (D_SimpleResult->Bin[i] + 1); // Bin 인덱스가 0부터 시작하므로 +1 필요
+		// 실제 주파수 계산
+		//FreqByBin = 9.72
+		D_SimpleResult->Freq[i] = D_SimpleResult->FreqByBin * (D_SimpleResult->Bin[i]+1); 
 
-		// 속도 계산
-		D_SimpleResult->Speed[i] = D_SimpleResult->Freq[i] / D_SimpleResult->Freq_1Kmh;
+		// 속도 계산(20개 저장)
+		//Freq_1Kmh = 44.72
+ 		D_SimpleResult->Speed[i] = D_SimpleResult->Freq[i] / D_SimpleResult->Freq_1Kmh;
 	}
+	int a = 0;
 }
 
 
@@ -382,11 +386,11 @@ void Buffer::Phase()
 
 
 	// Speed에 방향적용
-	for (uint16_t i = 0; i < DopplerObjectNum; i++)
+	/*for (uint16_t i = 0; i < DopplerObjectNum; i++)
 	{
 		D_SimpleResult->Direction[i] == EnumDirection::Oncoming ? D_SimpleResult->Speed[i] *= -1 : 1;
 		D_SimpleResult->Direction[i] == EnumDirection::Unknown ? D_SimpleResult->Speed[i] *= 0 : 1;
-	}
+	}*/
 }
 
 

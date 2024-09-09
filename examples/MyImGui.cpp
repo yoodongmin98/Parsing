@@ -3,6 +3,9 @@
 #include <algorithm>
 #include <random>
 #include "MyImGui.h"
+#include <math.h>
+#include <stdlib.h>
+#include <iostream>
 
 #include "Core.h"
 #include "Buffer.h"
@@ -13,6 +16,9 @@ MyImGui::MyImGui()
 {
 	Cores = std::make_shared<Core>();
 	InstanceBuffer = std::make_shared<Buffer>();
+	Speed.resize(20);
+
+		
 }
 MyImGui::~MyImGui()
 {
@@ -221,7 +227,7 @@ void MyImGui::CoreStartAndGraphDebug(int argc, char** argv)
 			if (ImPlot::BeginPlot("Default I, Q Data", "Index", "Value", ImVec2(500, 300), ImPlotFlags_None))
 			{
 				ImPlot::SetupAxisLimits(ImAxis_X1, -100, 1024);
-				ImPlot::SetupAxisLimits(ImAxis_Y1, -300, 400);
+				ImPlot::SetupAxisLimits(ImAxis_Y1, -300, 4096);
 				ImPlot::PlotLine("I Data", Classify_I.data(), (int)Classify_I.size());
 				ImPlot::PlotLine("Q Data", Classify_Q.data(), (int)Classify_Q.size());
 				ImPlot::EndPlot();
@@ -243,7 +249,7 @@ void MyImGui::CoreStartAndGraphDebug(int argc, char** argv)
 			if (ImPlot::BeginPlot("Doppler I,Q Data", "Index", "Value", ImVec2(500, 300), ImPlotFlags_None))
 			{
 				ImPlot::SetupAxisLimits(ImAxis_X1, -100, 1024);
-				ImPlot::SetupAxisLimits(ImAxis_Y1, -300, 400);
+				ImPlot::SetupAxisLimits(ImAxis_Y1, -300, 4096);
 				ImPlot::PlotLine("I Data", Doppler_I.data(), (int)Doppler_I.size());
 				ImPlot::PlotLine("Q Data", Doppler_Q.data(), (int)Doppler_Q.size());
 				ImPlot::EndPlot();
@@ -287,7 +293,7 @@ void MyImGui::CoreStartAndGraphDebug(int argc, char** argv)
 			if (ImPlot::BeginPlot("FFT I,Q Data", "Index", "Value", ImVec2(500, 300), ImPlotFlags_None))
 			{
 				ImPlot::SetupAxisLimits(ImAxis_X1, -100, 1024);
-				ImPlot::SetupAxisLimits(ImAxis_Y1, -300, 400);
+				ImPlot::SetupAxisLimits(ImAxis_Y1, -300, 5000);
 				ImPlot::PlotLine("I Data", FFT_I.data(), (int)FFT_I.size());
 				ImPlot::PlotLine("Q Data", FFT_Q.data(), (int)FFT_Q.size());
 				ImPlot::EndPlot();
@@ -389,16 +395,24 @@ void MyImGui::CoreStartAndGraphDebug(int argc, char** argv)
 	/////////////////////////WindowStart/////////////////////////////////////////////////////////////////
 	/////																							/////
 	/////																							/////
-	/////							Speed		얘는 표로 표시하는게 아니라 숫자로 표시해야할듯			/////
-	/////																							/////.
+	/////				Speed																		/////
+	/////																							/////
 			ImGui::Begin("CalCulate Window9");
-			Speed = Buffer::Buffers->GetDopplerSimpleResult()->Speed;
-			
-			if (ImPlot::BeginPlot("Speed Data", "Index", "Value(x100)", ImVec2(500, 300), ImPlotFlags_None))
+			//저장된 Speed배열(size=20)을 가져옴
+			Speed=Buffer::Buffers->GetDopplerSimpleResult()->Speed;
+
+			//가장 큰 값 3개 골라내기
+			sort(Speed.begin(), Speed.end(), std::greater<float>());
+			double Avg = accumulate(Speed.begin(), Speed.begin() + 3, 0.0f) / 3;
+			//3개의 평균값
+			SpeedVector.push_back(Avg);
+
+			//그래프 표기하는 부분
+			if (ImPlot::BeginPlot("Speed Data", "Index", "Value", ImVec2(500, 300), ImPlotFlags_None))
 			{
-				ImPlot::SetupAxisLimits(ImAxis_X1, -5, 25);
-				ImPlot::SetupAxisLimits(ImAxis_Y1, -100, 100);
-				ImPlot::PlotBars("Speed Data", Speed.data(), (int)Speed.size());
+				ImPlot::SetupAxisLimits(ImAxis_X1, -3, 150);
+				ImPlot::SetupAxisLimits(ImAxis_Y1, -5, 15);
+				ImPlot::PlotLine("Speed Data", SpeedVector.data(), (int)SpeedVector.size());
 				ImPlot::EndPlot();
 			}
 			ImGui::End();

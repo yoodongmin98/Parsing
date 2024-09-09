@@ -11,7 +11,7 @@
 #define AdcFilterSize_MAX 9
 #define AdcFilterSize_MIN 1
 class Buffer;
-
+class MyImGui;
 enum class EnumDirection
 {
 	Unknown = (0),
@@ -21,8 +21,10 @@ enum class EnumDirection
 
 class MDRRadar_Data final
 {
+
 public:
 	friend Buffer;
+	friend MyImGui;
 private:
 	uint32_t
 		VtuneAllways,					// 'D' is OFF, 'E' is ON
@@ -66,6 +68,7 @@ private:
 	uint32_t	IntermittentNoiseThreshold;	// Default:0
 };
 
+
 class DopplerSimpleResult final
 {
 public:
@@ -74,16 +77,17 @@ public:
 		Speed.resize(DopplerObjectNum);
 		Value.resize(DopplerObjectNum);
 		Freq.resize(DopplerObjectNum);
+		Bin.resize(DopplerObjectNum);
 	}
 	friend Buffer;
 
 	float
-		FreqByBin = 9.765625f, // 1024 (샘플링 데이터 개수) / 1000 (샘플링 주파수)
+		FreqByBin = 9.765625f, //  10GHz (샘플링 주파수) / 1024 (샘플링 데이터 개수) 
 		Freq_1Kmh = 44.72222222222216f; // 주파수를 특정속도와 대응시키는 값 (mini 기준 avg값인 24.15 기준으로 계산된 값)
 	uint32_t
 		BiausBin = 1,
 		CalcBinNums = 500;
-	uint32_t Bin[DopplerObjectNum]; 
+		std::vector<float> Bin;
 		std::vector<float> Speed;
 		std::vector<float> Value;
 		std::vector<float> Freq;

@@ -27,11 +27,10 @@ void Core::Start(int argc, char** argv)
 
 	serial::Serial my_serial(port, baud, serial::Timeout::simpleTimeout(1000));
 
-	if (my_serial.isOpen())
+	/*if (my_serial.isOpen())
 		std::cout << " 시리얼 정상 작동 중" << std::endl;
 	else
-		std::cout << " 시리얼 안돼용" << std::endl;
-
+		std::cout << " 시리얼 안돼용" << std::endl;*/
 	//연산 병렬처리하기(시간되면) 쓰레드 써야하나
 	if (my_serial.available())
 	{
