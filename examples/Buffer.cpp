@@ -11,6 +11,7 @@
 
 Buffer* Buffer::Buffers;
 
+using namespace std;
 Buffer::Buffer()
 {
 	Buffers = this;
@@ -19,7 +20,6 @@ Buffer::Buffer()
 	AdcFilters = std::make_shared<AdcFilter>();
 	MyFFTs = std::make_shared<MyFFT>();
 	MDR_Mag.resize(MDR_ADC_SampleSize / 2);
-
 }
 
 Buffer::~Buffer()
@@ -97,21 +97,21 @@ void Buffer::WindowFunction()
 	MDR_I_Window = MDR_I_Doppler;
 	MDR_Q_Window = MDR_Q_Doppler;
 
-	//Hamming Window	
-	for (auto i = 0; i < static_cast<int>(Temp_Side_Idx); ++i)
-	{
-		//MDR_I_raw[i] *= i / Temp_Side_i;
-		//MDR_Q_raw[i] *= i / Temp_Side_i;
-		MDR_I_Window[i] *= i / Temp_Side_Idx;
-		MDR_Q_Window[i] *= i / Temp_Side_Idx;
-	}
-	for (auto p = MDR_ADC_SampleSize - static_cast<int>(Temp_Side_Idx); p < MDR_ADC_SampleSize; ++p)
-	{
-		//MDR_I_raw[p] *= (MDR_ADC_SampleSize - p - 1) / Temp_Side_i;
-		//MDR_Q_raw[p] *= (MDR_ADC_SampleSize - p - 1) / Temp_Side_i;
-		MDR_I_Window[p] *= (MDR_ADC_SampleSize - p - 1) / Temp_Side_Idx;
-		MDR_Q_Window[p] *= (MDR_ADC_SampleSize - p - 1) / Temp_Side_Idx;
-	}
+	////Hamming Window	
+	//for (auto i = 0; i < static_cast<int>(Temp_Side_Idx); ++i)
+	//{
+	//	//MDR_I_raw[i] *= i / Temp_Side_i;
+	//	//MDR_Q_raw[i] *= i / Temp_Side_i;
+	//	MDR_I_Window[i] *= i / Temp_Side_Idx;
+	//	MDR_Q_Window[i] *= i / Temp_Side_Idx;
+	//}
+	//for (auto p = MDR_ADC_SampleSize - static_cast<int>(Temp_Side_Idx); p < MDR_ADC_SampleSize; ++p)
+	//{
+	//	//MDR_I_raw[p] *= (MDR_ADC_SampleSize - p - 1) / Temp_Side_i;
+	//	//MDR_Q_raw[p] *= (MDR_ADC_SampleSize - p - 1) / Temp_Side_i;
+	//	MDR_I_Window[p] *= (MDR_ADC_SampleSize - p - 1) / Temp_Side_Idx;
+	//	MDR_Q_Window[p] *= (MDR_ADC_SampleSize - p - 1) / Temp_Side_Idx;
+	//}
 }
 
 
@@ -128,30 +128,30 @@ void Buffer::FastFurierTransform(int Reverse)
 		//}
 		MDR_I_FFT = MDR_I_Window;
 		MDR_Q_FFT = MDR_Q_Window;
-		std::vector<kiss_fft_cpx> input(MDR_ADC_SampleSize);
-		std::vector<kiss_fft_cpx> output(MDR_ADC_SampleSize);
-		kiss_fft_cfg cfg = kiss_fft_alloc(MDR_ADC_SampleSize, 0, nullptr, nullptr);
+		//std::vector<kiss_fft_cpx> input(MDR_ADC_SampleSize);
+		//std::vector<kiss_fft_cpx> output(MDR_ADC_SampleSize);
+		//kiss_fft_cfg cfg = kiss_fft_alloc(MDR_ADC_SampleSize, 0, nullptr, nullptr);
 
-		for (int i = 0; i < MDR_ADC_SampleSize; ++i) 
-		{
-			input[i].r = MDR_I_Window[i];  // 실수부에 I 데이터 설정
-			input[i].i = MDR_Q_Window[i];  // 허수부에 Q 데이터 설정
-		}
-		kiss_fft(cfg, input.data(), output.data());
-		for (int j = 0; j < MDR_ADC_SampleSize; ++j)
-		{
-			MDR_I_FFT[j]=output[j].r;
-			MDR_Q_FFT[j]=output[j].i;
-		}
+		//for (int i = 0; i < MDR_ADC_SampleSize; ++i) 
+		//{
+		//	input[i].r = MDR_I_Window[i];  // 실수부에 I 데이터 설정
+		//	input[i].i = MDR_Q_Window[i];  // 허수부에 Q 데이터 설정
+		//}
+		//kiss_fft(cfg, input.data(), output.data());
+		//for (int j = 0; j < MDR_ADC_SampleSize; ++j)
+		//{
+		//	MDR_I_FFT[j]=output[j].r;
+		//	MDR_Q_FFT[j]=output[j].i;
+		//}
 		
 
-		/*MyFFTs->FFTInit(MDR_I_FFT, MDR_Q_FFT);
+		MyFFTs->FFTInit(MDR_I_FFT, MDR_Q_FFT);
 		std::vector<std::complex<double>> Result = MyFFTs->Foward_FFT();
 		for (auto i = 0; i < MDR_ADC_SampleSize; ++i)
 		{
 			MDR_I_FFT[i] = Result[i].real();
 			MDR_Q_FFT[i] = Result[i].imag();
-		}*/
+		}
 	}
 	else
 	{
@@ -164,29 +164,29 @@ void Buffer::FastFurierTransform(int Reverse)
 		MDR_I_RFFT = MDR_I_HLCUT;
 		MDR_Q_RFFT = MDR_Q_HLCUT;
 
-		/*MyFFTs->FFTInit(MDR_I_RFFT, MDR_Q_RFFT);
+		MyFFTs->FFTInit(MDR_I_RFFT, MDR_Q_RFFT);
 		std::vector<std::complex<double>> Result = MyFFTs->Reverse_FFT();
 		for (auto i = 0; i < MDR_ADC_SampleSize; ++i)
 		{
 			MDR_I_RFFT[i] = Result[i].real();
 			MDR_Q_RFFT[i] = Result[i].imag();
-		}*/
-		std::vector<kiss_fft_cpx> input(MDR_ADC_SampleSize);
-		std::vector<kiss_fft_cpx> output(MDR_ADC_SampleSize);
+		}
+		//std::vector<kiss_fft_cpx> input(MDR_ADC_SampleSize);
+		//std::vector<kiss_fft_cpx> output(MDR_ADC_SampleSize);
 
-		kiss_fft_cfg cfg = kiss_fft_alloc(MDR_ADC_SampleSize, 1, nullptr, nullptr);  // 1이 reverse
-		for (int i = 0; i < MDR_ADC_SampleSize; ++i)
-		{
-			input[i].r = MDR_I_HLCUT[i];  // 실수부에 I 데이터 설정
-			input[i].i = MDR_Q_HLCUT[i];  // 이하 동문
-		}
-		kiss_fft(cfg, input.data(), output.data());
-		for (int j = 0; j < MDR_ADC_SampleSize; ++j)
-		{
-			//일단 덮어쓰기
-			MDR_I_RFFT[j]=output[j].r/ MDR_ADC_SampleSize;
-			MDR_Q_RFFT[j]=output[j].i/ MDR_ADC_SampleSize;
-		}
+		//kiss_fft_cfg cfg = kiss_fft_alloc(MDR_ADC_SampleSize, 1, nullptr, nullptr);  // 1이 reverse
+		//for (int i = 0; i < MDR_ADC_SampleSize; ++i)
+		//{
+		//	input[i].r = MDR_I_HLCUT[i];  // 실수부에 I 데이터 설정
+		//	input[i].i = MDR_Q_HLCUT[i];  // 이하 동문
+		//}
+		//kiss_fft(cfg, input.data(), output.data());
+		//for (int j = 0; j < MDR_ADC_SampleSize; ++j)
+		//{
+		//	//일단 덮어쓰기
+		//	MDR_I_RFFT[j]=output[j].r/ MDR_ADC_SampleSize;
+		//	MDR_Q_RFFT[j]=output[j].i/ MDR_ADC_SampleSize;
+		//}
 	}
 	return;
 }
@@ -231,11 +231,11 @@ void Buffer::HighLowCut()
 	MDR_I_HLCUT = MDR_I_DCPOINT;
 	MDR_Q_HLCUT = MDR_Q_DCPOINT;
 	//Low Cut
-	if (MDRRadar_Datas->FreqLowCutEnable)
-	{
-		std::fill(MDR_I_HLCUT.begin(), MDR_I_HLCUT.begin() + (uint16_t)(MDRRadar_Datas->FreqLowCut / D_SimpleResult->FreqByBin + 1) * 2, 0.0f);
-		std::fill(MDR_Q_HLCUT.begin(), MDR_Q_HLCUT.begin() + (uint16_t)(MDRRadar_Datas->FreqLowCut / D_SimpleResult->FreqByBin + 1) * 2, 0.0f);
-	}
+	//if (MDRRadar_Datas->FreqLowCutEnable)
+	//{
+	//	std::fill(MDR_I_HLCUT.begin(), MDR_I_HLCUT.begin() + (uint16_t)(MDRRadar_Datas->FreqLowCut / D_SimpleResult->FreqByBin + 1) * 2, 0.0f);
+	//	std::fill(MDR_Q_HLCUT.begin(), MDR_Q_HLCUT.begin() + (uint16_t)(MDRRadar_Datas->FreqLowCut / D_SimpleResult->FreqByBin + 1) * 2, 0.0f);
+	//}
 
 	//// High Cut
 	//if (MDRRadar_Datas->FreqHighCutEnable)
@@ -265,8 +265,8 @@ void Buffer::CalculateMagnitude()
 		MDR_Mag.resize(MDR_ADC_SampleSize/2);
 	}
 	for (int i = 0; i < MDR_ADC_SampleSize/2; i++) {
-		float real = MDR_I_RFFT[i];   // 실수부
-		float imag = MDR_Q_RFFT[i];   // 허수부
+		float real = MDR_I_HLCUT[i];   // 실수부
+		float imag = MDR_Q_HLCUT[i];   // 허수부
 		MDR_Mag[i] = sqrtf(real * real + imag * imag);
 	}
 	int a = 0;
@@ -285,27 +285,35 @@ void Buffer::BinFreqSpeedCalculate()
 	//Magnitude를 담고있는 512개짜리 배열
 	MDR_I_BinFreq = MDR_Mag;
 
-	for (int i = 0; i < DopplerObjectNum; ++i) {
-		// Magnitude에서 가장 큰 값의 위치 찾기
+	/*for (int i = 0; i < 20; ++i) {*/
+		 //Magnitude에서 가장 큰 값의 위치 찾기
+		//Peak Detection 알고리즘 or CFAR or threshold
+		
+	
+		//Find_peak(MDR_I_BinFreq);
+		//if (!Peaks.size())
+			//return;
+		 
 		auto maxIter = std::max_element(MDR_I_BinFreq.begin(), MDR_I_BinFreq.end());
 		int maxIndex = std::distance(MDR_I_BinFreq.begin(), maxIter);
 
 		// 최대 Magnitude 값과 Bin 인덱스 저장
-		D_SimpleResult->Value[i] = *maxIter;
-		D_SimpleResult->Bin[i] = maxIndex; // Bin 인덱스는 0부터 시작
-
+		D_SimpleResult->Value[0] = *maxIter;
+		D_SimpleResult->Bin[0] = maxIndex; // Bin 인덱스는 0부터 시작
 		// 해당 Bin의 Magnitude 값을 0으로 설정
 		MDR_I_BinFreq[maxIndex] = 0;
 
+		
+
 		// 실제 주파수 계산
-		//FreqByBin = 9.72
-		D_SimpleResult->Freq[i] = D_SimpleResult->FreqByBin * (D_SimpleResult->Bin[i]+1); 
+		//FreqByBin = 4.88
+		D_SimpleResult->Freq[0] = D_SimpleResult->FreqByBin * (D_SimpleResult->Bin[0]+1); 
 
 		// 속도 계산(20개 저장)
 		//Freq_1Kmh = 44.72
- 		D_SimpleResult->Speed[i] = D_SimpleResult->Freq[i] / D_SimpleResult->Freq_1Kmh;
-	}
-	int a = 0;
+ 		D_SimpleResult->Speed[0] = D_SimpleResult->Freq[0] / D_SimpleResult->Freq_1Kmh;
+	//}
+ 	int a = 0;
 }
 
 
@@ -466,3 +474,36 @@ void Buffer::ScailingAndAlgorithm()
 			V = abs(V - i_mean);
 	}
 }
+
+
+////Peak Detection Algorithm
+//vector<pair<int,float>> Buffer::Find_peak(std::vector<float> _Data)
+//{
+//	//일정한 신호니까 최고점을 기준으로 쓰레스홀드를 +=5%내외로 정하고 그에 해당하는 주기적인 기준점을 찾기?
+//	
+//	vector<pair<int, float>> Peaks;
+//	//처음 감지되는 최고점을 미리찾고 그에 맞는 기준점 찾기
+//	//일단 잘 모르겠으니까 100번만 돌려서 다 들어가는지나 볼까?
+//	for (auto i = 0; i < 50; ++i)
+//	{
+//		std::vector<float>::iterator maxIter = max_element(_Data.begin(), _Data.end());
+//		
+//		if (*maxIter == 0.0f)
+//			continue;
+//		threshold = *maxIter;
+//		int thresidx = std::distance(_Data.begin(), maxIter);
+//		
+//		if (thresidx < _Data.size() - 1 && thresidx>0)
+//		{
+//			/*if (_Data[thresidx] > _Data[thresidx - 1] && _Data[thresidx] > _Data[thresidx + 1] && _Data[thresidx] > threshold * 0.9 && _Data[thresidx] < threshold * 1.1)
+//			{*/
+//				Peaks.push_back({ thresidx,_Data[thresidx] });
+//			//}
+//		}
+//		_Data[thresidx] = 0;
+//		
+//	}
+//	sort(Peaks.begin(), Peaks.end());
+//	int a = 0;
+//	return Peaks;
+//}

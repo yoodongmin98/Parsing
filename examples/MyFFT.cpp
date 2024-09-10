@@ -115,8 +115,8 @@ void MyFFT::Cooley_Tukey_FFT(std::vector<std::complex<double>>& _IQArray, bool I
 	}
 
 	//Â¦ È¦¼ö³¢¸® Àç±Í °è»ê
-	Cooley_Tukey_FFT(even);
-	Cooley_Tukey_FFT(odd);
+	Cooley_Tukey_FFT(even,Inverse);
+	Cooley_Tukey_FFT(odd,Inverse);
 
 	if (Inverse)
 		Dot = 1.0;
@@ -125,7 +125,7 @@ void MyFFT::Cooley_Tukey_FFT(std::vector<std::complex<double>>& _IQArray, bool I
 	for (int k = 0; k < Size / 2; ++k)
 	{
 		//È¦¼ö idx¿¡ ´ëÇÑ ±âÀúÇÔ¼ö ³»ÀûÀ» ¹Ì¸® ±¸ÇÔ
-		std::complex<double> t = std::polar(1.0, Dot * PI * k / Size) * odd[k];
+		std::complex<double> t = std::polar(1.0, Dot * 2.0 * PI * k / Size) * odd[k];
 		_IQArray[k] = even[k] + t;
 		_IQArray[k + Size / 2] = even[k] - t;
 	}

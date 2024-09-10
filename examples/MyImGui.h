@@ -80,7 +80,7 @@ private:
 
 	//Test
 	std::vector<int> MaxIndex;
-	std::vector<int> SpeedVector;
+	std::vector<float> SpeedVector;
 	std::vector<int> SpeedVector2;
 	std::vector<int> SpeedVector3;
 	int MaxValue = 0;

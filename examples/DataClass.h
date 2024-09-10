@@ -82,7 +82,8 @@ public:
 	friend Buffer;
 
 	float
-		FreqByBin = 9.765625f, //  10GHz (샘플링 주파수) / 1024 (샘플링 데이터 개수) 
+		//알고보니 1.5Ghz였고요
+		FreqByBin = 4.8828125f, //  5GHz (샘플링 주파수) / 1024 (샘플링 데이터 개수) 
 		Freq_1Kmh = 44.72222222222216f; // 주파수를 특정속도와 대응시키는 값 (mini 기준 avg값인 24.15 기준으로 계산된 값)
 	uint32_t
 		BiausBin = 1,

@@ -227,7 +227,7 @@ void MyImGui::CoreStartAndGraphDebug(int argc, char** argv)
 			if (ImPlot::BeginPlot("Default I, Q Data", "Index", "Value", ImVec2(500, 300), ImPlotFlags_None))
 			{
 				ImPlot::SetupAxisLimits(ImAxis_X1, -100, 1024);
-				ImPlot::SetupAxisLimits(ImAxis_Y1, -300, 4096);
+				ImPlot::SetupAxisLimits(ImAxis_Y1, -300, 400);
 				ImPlot::PlotLine("I Data", Classify_I.data(), (int)Classify_I.size());
 				ImPlot::PlotLine("Q Data", Classify_Q.data(), (int)Classify_Q.size());
 				ImPlot::EndPlot();
@@ -249,7 +249,7 @@ void MyImGui::CoreStartAndGraphDebug(int argc, char** argv)
 			if (ImPlot::BeginPlot("Doppler I,Q Data", "Index", "Value", ImVec2(500, 300), ImPlotFlags_None))
 			{
 				ImPlot::SetupAxisLimits(ImAxis_X1, -100, 1024);
-				ImPlot::SetupAxisLimits(ImAxis_Y1, -300, 4096);
+				ImPlot::SetupAxisLimits(ImAxis_Y1, -300, 400);
 				ImPlot::PlotLine("I Data", Doppler_I.data(), (int)Doppler_I.size());
 				ImPlot::PlotLine("Q Data", Doppler_Q.data(), (int)Doppler_Q.size());
 				ImPlot::EndPlot();
@@ -293,7 +293,7 @@ void MyImGui::CoreStartAndGraphDebug(int argc, char** argv)
 			if (ImPlot::BeginPlot("FFT I,Q Data", "Index", "Value", ImVec2(500, 300), ImPlotFlags_None))
 			{
 				ImPlot::SetupAxisLimits(ImAxis_X1, -100, 1024);
-				ImPlot::SetupAxisLimits(ImAxis_Y1, -300, 5000);
+				ImPlot::SetupAxisLimits(ImAxis_Y1, -300, 400);
 				ImPlot::PlotLine("I Data", FFT_I.data(), (int)FFT_I.size());
 				ImPlot::PlotLine("Q Data", FFT_Q.data(), (int)FFT_Q.size());
 				ImPlot::EndPlot();
@@ -382,7 +382,7 @@ void MyImGui::CoreStartAndGraphDebug(int argc, char** argv)
 			if (ImPlot::BeginPlot("Magnitude I,Q Data", "Index", "Value(x100)", ImVec2(500, 300), ImPlotFlags_None))
 			{
 				ImPlot::SetupAxisLimits(ImAxis_X1, -100, 512);
-				ImPlot::SetupAxisLimits(ImAxis_Y1, -300, 400);
+				ImPlot::SetupAxisLimits(ImAxis_Y1, -50, 100000);
 				ImPlot::PlotLine("I Data", MAG.data(), (int)MAG.size());
 				ImPlot::EndPlot();
 			}
@@ -403,15 +403,13 @@ void MyImGui::CoreStartAndGraphDebug(int argc, char** argv)
 
 			//가장 큰 값 3개 골라내기
 			sort(Speed.begin(), Speed.end(), std::greater<float>());
-			double Avg = accumulate(Speed.begin(), Speed.begin() + 3, 0.0f) / 3;
-			//3개의 평균값
-			SpeedVector.push_back(Avg);
-
+			if (Speed[0] > 1.0f)
+				SpeedVector.push_back(Speed[0]);
 			//그래프 표기하는 부분
 			if (ImPlot::BeginPlot("Speed Data", "Index", "Value", ImVec2(500, 300), ImPlotFlags_None))
 			{
 				ImPlot::SetupAxisLimits(ImAxis_X1, -3, 150);
-				ImPlot::SetupAxisLimits(ImAxis_Y1, -5, 15);
+				ImPlot::SetupAxisLimits(ImAxis_Y1, 0, 30);
 				ImPlot::PlotLine("Speed Data", SpeedVector.data(), (int)SpeedVector.size());
 				ImPlot::EndPlot();
 			}

@@ -2,6 +2,8 @@
 #include <vector>
 #include <iostream>
 
+using namespace std;
+
 class MyFFT;
 class AdcFilter;
 class Calculator;
@@ -28,6 +30,8 @@ public:
 	{
 		return MDRRadar_Datas;
 	}
+	vector<pair<int, float>> Find_peak(std::vector<float> _Data);
+	
 
 
 	//////////////////////Get Vector//////////////////////
@@ -162,6 +166,7 @@ private:
 	float Temp_Side_Idx = 100.0f;
 	float LPF_Temp_I = 0;
 	float LPF_Temp_Q = 0;
+	float threshold = 0;
 
 	std::vector<uint8_t> Adc_raw_buf;
 
