@@ -414,6 +414,8 @@ void MyImGui::CoreStartAndGraphDebug(int argc, char** argv)
 				ImPlot::EndPlot();
 			}
 			ImGui::End();
+
+			
 	/////																							/////
 	/////																							/////	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////

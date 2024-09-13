@@ -305,11 +305,11 @@ void Buffer::BinFreqSpeedCalculate()
 
 		
 
-		// 실제 주파수 계산
+		// 실제 주파수 계산(속도를 정해놓으면 샘플링 주파수 유추 가능)
 		//FreqByBin = 4.88
 		D_SimpleResult->Freq[0] = D_SimpleResult->FreqByBin * (D_SimpleResult->Bin[0]+1); 
 
-		// 속도 계산(20개 저장)
+		// 속도 계산
 		//Freq_1Kmh = 44.72
  		D_SimpleResult->Speed[0] = D_SimpleResult->Freq[0] / D_SimpleResult->Freq_1Kmh;
 	//}
@@ -328,6 +328,7 @@ void Buffer::Phase()
 	MDR_Q_Phase = MDR_Q_RFFT;
 	for (auto i = 0; i < DopplerObjectNum; ++i)
 	{
+		//두 벡터가 이루는 각도를 구하는게 아니라, 한점을 원점으로 생각하여 다른 한점이 그 원점을 기준으로 절대각을 얼마만큼 가지는가를 구한다는 것이다.
 		D_SimpleResult->PhaseRadian_I[i] = atan2f(MDR_I_Phase[D_SimpleResult->Bin[i] * 2 + 1], MDR_I_Phase[D_SimpleResult->Bin[i] * 2]); //복소수 형태로 표현
 		D_SimpleResult->PhaseRadian_Q[i] = atan2f(MDR_Q_Phase[D_SimpleResult->Bin[i] * 2 + 1], MDR_Q_Phase[D_SimpleResult->Bin[i] * 2]);
 
