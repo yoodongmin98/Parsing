@@ -30,7 +30,7 @@ void Calculator::CalCulate(uint8_t _byte)
 		Buffer::Buffers->FastFurierTransform(1); // Apply FFT <enter 1 as the argument = reverse fft>
 		Buffer::Buffers->CalculateMagnitude(); //Apply Magnitude(Vector Size Calculate)
 		Buffer::Buffers->BinFreqSpeedCalculate(); //Bin , Freq , Speed
-		//Buffer::Buffers->Phase(); //Divide Phase
+		Buffer::Buffers->Phase(); //Divide Phase
 		Buffer::Buffers->Filtering(); //Filtering Graph
 		Buffer::Buffers->IQPower_LPF(); //Get Realtime_IQ_Power_LPF_Buf
 		Buffer::Buffers->ScailingAndAlgorithm(); //Scailing And Apply Integral Algorithm 

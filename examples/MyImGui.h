@@ -7,7 +7,7 @@
 #include <tchar.h>
 #include "implot.h"  
 #include <queue>
-
+#include "DataClass.h"
 #include <iostream>
 #include <vector>
 
@@ -19,6 +19,7 @@ static UINT                     g_ResizeWidth = 0, g_ResizeHeight = 0;
 static D3DPRESENT_PARAMETERS    g_d3dpp = {};
 
 LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
 
 class Buffer;
 class Core;
@@ -74,7 +75,6 @@ private:
 	std::vector<float> Speed;
 
 	
-
 
 
 

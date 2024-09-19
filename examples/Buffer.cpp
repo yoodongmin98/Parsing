@@ -285,21 +285,15 @@ void Buffer::BinFreqSpeedCalculate()
 	//Magnitude를 담고있는 512개짜리 배열
 	MDR_I_BinFreq = MDR_Mag;
 
-	/*for (int i = 0; i < 20; ++i) {*/
+	for (int i = 0; i < 20; ++i) {
 		 //Magnitude에서 가장 큰 값의 위치 찾기
-		//Peak Detection 알고리즘 or CFAR or threshold
-		
-	
-		//Find_peak(MDR_I_BinFreq);
-		//if (!Peaks.size())
-			//return;
-		 
+
 		auto maxIter = std::max_element(MDR_I_BinFreq.begin(), MDR_I_BinFreq.end());
 		int maxIndex = std::distance(MDR_I_BinFreq.begin(), maxIter);
 
 		// 최대 Magnitude 값과 Bin 인덱스 저장
-		D_SimpleResult->Value[0] = *maxIter;
-		D_SimpleResult->Bin[0] = maxIndex; // Bin 인덱스는 0부터 시작
+		D_SimpleResult->Value[i] = *maxIter;
+		D_SimpleResult->Bin[i] = maxIndex; // Bin 인덱스는 0부터 시작
 		// 해당 Bin의 Magnitude 값을 0으로 설정
 		MDR_I_BinFreq[maxIndex] = 0;
 
@@ -307,12 +301,12 @@ void Buffer::BinFreqSpeedCalculate()
 
 		// 실제 주파수 계산(속도를 정해놓으면 샘플링 주파수 유추 가능)
 		//FreqByBin = 4.88
-		D_SimpleResult->Freq[0] = D_SimpleResult->FreqByBin * (D_SimpleResult->Bin[0]+1); 
+		D_SimpleResult->Freq[i] = D_SimpleResult->FreqByBin * (D_SimpleResult->Bin[i]+1); 
 
 		// 속도 계산
 		//Freq_1Kmh = 44.72
- 		D_SimpleResult->Speed[0] = D_SimpleResult->Freq[0] / D_SimpleResult->Freq_1Kmh;
-	//}
+ 		D_SimpleResult->Speed[i] = D_SimpleResult->Freq[i] / D_SimpleResult->Freq_1Kmh;
+	}
  	int a = 0;
 }
 
@@ -328,22 +322,25 @@ void Buffer::Phase()
 	MDR_Q_Phase = MDR_Q_RFFT;
 	for (auto i = 0; i < DopplerObjectNum; ++i)
 	{
-		//두 벡터가 이루는 각도를 구하는게 아니라, 한점을 원점으로 생각하여 다른 한점이 그 원점을 기준으로 절대각을 얼마만큼 가지는가를 구한다는 것이다.
-		D_SimpleResult->PhaseRadian_I[i] = atan2f(MDR_I_Phase[D_SimpleResult->Bin[i] * 2 + 1], MDR_I_Phase[D_SimpleResult->Bin[i] * 2]); //복소수 형태로 표현
+		//두 벡터가 이루는 각도를 구하는게 아니라, 한점을 원점으로 생각하여 다른 한점이 그 원점을 기준으로 "절대각"을 얼마만큼 가지는가를 구한다는 것이다.
+		//가장 큰 신호가 담긴 bin위치를 찾아서 순서대로 atan2f(상대각도)를 구한다.
+		D_SimpleResult->PhaseRadian_I[i] = atan2f(MDR_I_Phase[D_SimpleResult->Bin[i] * 2 + 1], MDR_I_Phase[D_SimpleResult->Bin[i] * 2]); 
 		D_SimpleResult->PhaseRadian_Q[i] = atan2f(MDR_Q_Phase[D_SimpleResult->Bin[i] * 2 + 1], MDR_Q_Phase[D_SimpleResult->Bin[i] * 2]);
 
 		//Phase예각 구하기
+		//Diff I 가 양수면(시계방향이면) 가까워지는것
 		if (D_SimpleResult->PhaseRadian_I[i] >= 0)
 		{
 			D_SimpleResult->PhaseRadianDiff[i] = D_SimpleResult->PhaseRadian_I[i] - D_SimpleResult->PhaseRadian_Q[i];
-
+			//PI(180도 이상 차이나면) -PI~PI사이로 맞춰주는과정1
 			if (D_SimpleResult->PhaseRadianDiff[i] > PI)
 				D_SimpleResult->PhaseRadianDiff[i] -= (PI * 2);
 		}
-		else
+		else //Diff I가 음수이면 (반시계방향이면) 멀어지는것.
 		{
 			D_SimpleResult->PhaseRadianDiff[i] = -(D_SimpleResult->PhaseRadian_Q[i] - D_SimpleResult->PhaseRadian_I[i]);
 
+			//PI(180도 이상 차이나면) -PI~PI사이로 맞춰주는과정2
 			if (D_SimpleResult->PhaseRadianDiff[i] < -PI)
 				D_SimpleResult->PhaseRadianDiff[i] += (PI * 2);
 		}
@@ -367,12 +364,13 @@ void Buffer::Phase()
 				D_SimpleResult->PhaseDegreeDiff[i] += 360;
 		}
 		// Direction 구하기
-		if (D_SimpleResult->PhaseDegreeDiff[i] > 70 && D_SimpleResult->PhaseDegreeDiff[i] < 110)
-			D_SimpleResult->Direction[i] = EnumDirection::Faraway;
-		else if (D_SimpleResult->PhaseDegreeDiff[i] < -70 && D_SimpleResult->PhaseDegreeDiff[i] > -110)
+		//기준이 70~110사이인거는 mini에서 특정or 테스트 값인듯
+		if (D_SimpleResult->PhaseDegreeDiff[i] > 30 && D_SimpleResult->PhaseDegreeDiff[i] < 150)
+			D_SimpleResult->Direction[i] = EnumDirection::Faraway; 
+		else if (D_SimpleResult->PhaseDegreeDiff[i] < -30 && D_SimpleResult->PhaseDegreeDiff[i] > -150)
 			D_SimpleResult->Direction[i] = EnumDirection::Oncoming;
 		else
-			D_SimpleResult->Direction[i] = EnumDirection::Unknown;
+			D_SimpleResult->Direction[i] = EnumDirection::Unknown; 
 	}
 
 
@@ -394,7 +392,7 @@ void Buffer::Phase()
 		MDRRadar_Datas->Speed = 0;
 
 
-	// Speed에 방향적용
+	
 	/*for (uint16_t i = 0; i < DopplerObjectNum; i++)
 	{
 		D_SimpleResult->Direction[i] == EnumDirection::Oncoming ? D_SimpleResult->Speed[i] *= -1 : 1;

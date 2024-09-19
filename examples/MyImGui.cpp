@@ -17,6 +17,7 @@ MyImGui::MyImGui()
 	Cores = std::make_shared<Core>();
 	InstanceBuffer = std::make_shared<Buffer>();
 	Speed.resize(20);
+	
 
 		
 }
@@ -400,17 +401,22 @@ void MyImGui::CoreStartAndGraphDebug(int argc, char** argv)
 			ImGui::Begin("CalCulate Window9");
 			//저장된 Speed배열(size=20)을 가져옴
 			Speed=Buffer::Buffers->GetDopplerSimpleResult()->Speed;
-
-			//가장 큰 값 3개 골라내기
-			sort(Speed.begin(), Speed.end(), std::greater<float>());
-			if (Speed[0] > 1.0f)
-				SpeedVector.push_back(Speed[0]);
+		
+			//가장 작은 값 3개 골라내기(튀는 값 방지)
+			sort(Speed.begin(), Speed.end(), std::less<float>());
+			
+			std::vector<float> Result;
+			for (auto i = 1; i <= 10; ++i)
+			{
+				//대충 10개만뽑아봐
+				Result.push_back(accumulate(Speed.begin(), Speed.end(), 0)/Speed.size());
+ 			}
 			//그래프 표기하는 부분
 			if (ImPlot::BeginPlot("Speed Data", "Index", "Value", ImVec2(500, 300), ImPlotFlags_None))
 			{
-				ImPlot::SetupAxisLimits(ImAxis_X1, -3, 150);
-				ImPlot::SetupAxisLimits(ImAxis_Y1, 0, 30);
-				ImPlot::PlotLine("Speed Data", SpeedVector.data(), (int)SpeedVector.size());
+				ImPlot::SetupAxisLimits(ImAxis_X1, -3, 15);
+				ImPlot::SetupAxisLimits(ImAxis_Y1, 0, 40);
+				ImPlot::PlotLine("Speed Data", Result.data(), (int)Result.size());
 				ImPlot::EndPlot();
 			}
 			ImGui::End();
@@ -424,15 +430,22 @@ void MyImGui::CoreStartAndGraphDebug(int argc, char** argv)
 	/////////////////////////WindowStart/////////////////////////////////////////////////////////////////
 	/////																							/////
 	/////																							/////
-	/////							Freq															/////
+	/////							Direction														/////
 	/////																							/////
+			std::vector<int> Direction;
+			Direction.resize(20);
+			for (auto i = 0; i < Direction.size(); ++i)
+			{
+				Direction[i]= static_cast<int>(Buffer::Buffers->GetDopplerSimpleResult()->Direction[i]);
+			}
+			
+
 			ImGui::Begin("CalCulate Window10");
-			Freq = Buffer::Buffers->GetDopplerSimpleResult()->Freq;
 			if (ImPlot::BeginPlot("Freq Data", "Index", "Value(x100)", ImVec2(500, 300), ImPlotFlags_None))
 			{
 				ImPlot::SetupAxisLimits(ImAxis_X1, -3, 22);
-				ImPlot::SetupAxisLimits(ImAxis_Y1, -100, 6000);
-				ImPlot::PlotLine("Freq Data", Freq.data(), (int)Freq.size());
+				ImPlot::SetupAxisLimits(ImAxis_Y1, -3, 3);
+				ImPlot::PlotLine("Freq Data", Direction.data(), (int)Direction.size());
 				ImPlot::EndPlot();
 			}
 			ImGui::End();
