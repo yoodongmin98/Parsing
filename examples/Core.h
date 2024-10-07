@@ -1,7 +1,7 @@
 #pragma once
 
 
-
+#define DataSize 4096 //DataSize¼³Á¤
 
 class Calculator;
 class Core

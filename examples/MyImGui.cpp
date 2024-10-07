@@ -6,7 +6,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include <iostream>
-
+#include <unordered_map>
 #include "Core.h"
 #include "Buffer.h"
 #include "DataClass.h"
@@ -402,14 +402,13 @@ void MyImGui::CoreStartAndGraphDebug(int argc, char** argv)
 			//저장된 Speed배열(size=20)을 가져옴
 			Speed=Buffer::Buffers->GetDopplerSimpleResult()->Speed;
 		
-			//가장 작은 값 3개 골라내기(튀는 값 방지)
 			sort(Speed.begin(), Speed.end(), std::less<float>());
 			
-			std::vector<float> Result;
-			for (auto i = 1; i <= 10; ++i)
+			std::vector<int> Result;
+			for (auto i = 1; i <= 5; ++i)
 			{
-				//대충 10개만뽑아봐
-				Result.push_back(accumulate(Speed.begin(), Speed.end(), 0)/Speed.size());
+				//대충 5개만뽑아봐
+				Result.push_back(accumulate(Speed.begin()+10, Speed.begin()+11, 0)/2);
  			}
 			//그래프 표기하는 부분
 			if (ImPlot::BeginPlot("Speed Data", "Index", "Value", ImVec2(500, 300), ImPlotFlags_None))
@@ -432,20 +431,36 @@ void MyImGui::CoreStartAndGraphDebug(int argc, char** argv)
 	/////																							/////
 	/////							Direction														/////
 	/////																							/////
-			std::vector<int> Direction;
-			Direction.resize(20);
-			for (auto i = 0; i < Direction.size(); ++i)
-			{
-				Direction[i]= static_cast<int>(Buffer::Buffers->GetDopplerSimpleResult()->Direction[i]);
+			std::unordered_map<int, int> frequencyMap;
+
+			// 배열 내 각 원소의 빈도수를 계산
+			for (EnumDirection num : Buffer::Buffers->GetDopplerSimpleResult()->Direction) {
+				frequencyMap[static_cast<int>(num)]++;
 			}
-			
+
+			EnumDirection mostFrequentElement = Buffer::Buffers->GetDopplerSimpleResult()->Direction[0];
+			int maxFrequency = 0;
+
+			// 빈도수 맵을 순회하면서 가장 빈도수가 높은 원소 찾기
+			for ( auto& pair : frequencyMap) {
+				if (pair.second > maxFrequency) {
+					maxFrequency = pair.second;
+					int(mostFrequentElement) = pair.first;
+				}
+			}
+
 
 			ImGui::Begin("CalCulate Window10");
 			if (ImPlot::BeginPlot("Freq Data", "Index", "Value(x100)", ImVec2(500, 300), ImPlotFlags_None))
 			{
-				ImPlot::SetupAxisLimits(ImAxis_X1, -3, 22);
-				ImPlot::SetupAxisLimits(ImAxis_Y1, -3, 3);
-				ImPlot::PlotLine("Freq Data", Direction.data(), (int)Direction.size());
+				ImPlot::SetupAxisLimits(ImAxis_X1, -2, 2);
+				ImPlot::SetupAxisLimits(ImAxis_Y1, -2, 2);
+				if (int(mostFrequentElement) == 1) {
+					ImPlot::PlotText("Forward!", 0, 0);
+				}
+				else if (int(mostFrequentElement) == -1) {
+					ImPlot::PlotText("Backward!", 0, 0);
+				}
 				ImPlot::EndPlot();
 			}
 			ImGui::End();

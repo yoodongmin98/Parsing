@@ -1,7 +1,7 @@
 #include <cstdint>
 #include "Calculator.h"
 #include "Buffer.h"
-
+#include "Core.h"
 
 Calculator::Calculator()
 {
@@ -19,7 +19,7 @@ Calculator::~Calculator()
 void Calculator::CalCulate(uint8_t _byte)
 {
 	Buffer::Buffers->Fill_Adc_raw_buf(_byte); // Fill Adc_raw_buf
-	if (Buffer::Buffers->GetAdc_Size() == 4096)
+	if (Buffer::Buffers->GetAdc_Size() == DataSize)
 	{
 		Buffer::Buffers->DataClassify(); // I,Q Classify
 		Buffer::Buffers->Kill_Offset(); // Doppler I,Q && Kill offset

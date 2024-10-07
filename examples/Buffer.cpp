@@ -287,27 +287,21 @@ void Buffer::BinFreqSpeedCalculate()
 
 	for (int i = 0; i < 20; ++i) {
 		 //Magnitude에서 가장 큰 값의 위치 찾기
-
 		auto maxIter = std::max_element(MDR_I_BinFreq.begin(), MDR_I_BinFreq.end());
 		int maxIndex = std::distance(MDR_I_BinFreq.begin(), maxIter);
-
 		// 최대 Magnitude 값과 Bin 인덱스 저장
 		D_SimpleResult->Value[i] = *maxIter;
 		D_SimpleResult->Bin[i] = maxIndex; // Bin 인덱스는 0부터 시작
 		// 해당 Bin의 Magnitude 값을 0으로 설정
 		MDR_I_BinFreq[maxIndex] = 0;
 
-		
-
-		// 실제 주파수 계산(속도를 정해놓으면 샘플링 주파수 유추 가능)
+		// 실제 주파수 계산(신호발생기로 속도를 알면 샘플링 주파수 유추 가능)
 		//FreqByBin = 4.88
 		D_SimpleResult->Freq[i] = D_SimpleResult->FreqByBin * (D_SimpleResult->Bin[i]+1); 
-
 		// 속도 계산
 		//Freq_1Kmh = 44.72
  		D_SimpleResult->Speed[i] = D_SimpleResult->Freq[i] / D_SimpleResult->Freq_1Kmh;
 	}
- 	int a = 0;
 }
 
 
