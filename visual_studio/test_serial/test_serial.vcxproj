@@ -134,6 +134,7 @@
     <ClCompile Include="..\..\examples\MyFFT.cpp" />
     <ClCompile Include="..\..\examples\MyImGui.cpp" />
     <ClCompile Include="..\..\examples\serial_main.cpp" />
+    <ClCompile Include="ParsingClass.cpp" />
     <ClCompile Include="ThirdParty\ImGui\backends\imgui_impl_dx9.cpp" />
     <ClCompile Include="ThirdParty\ImGui\backends\imgui_impl_win32.cpp" />
     <ClCompile Include="ThirdParty\ImGui\imgui.cpp" />
@@ -159,6 +160,7 @@
     <ClInclude Include="..\..\examples\DataClass.h" />
     <ClInclude Include="..\..\examples\MyFFT.h" />
     <ClInclude Include="..\..\examples\MyImGui.h" />
+    <ClInclude Include="ParsingClass.h" />
     <ClInclude Include="ThirdParty\ImGui\backends\imgui_impl_dx9.h" />
     <ClInclude Include="ThirdParty\ImGui\backends\imgui_impl_win32.h" />
     <ClInclude Include="ThirdParty\ImGui\imconfig.h" />
