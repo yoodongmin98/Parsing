@@ -2,7 +2,6 @@
 #include <vector>
 #include <iostream>
 
-using namespace std;
 
 class MyFFT;
 class AdcFilter;
@@ -30,7 +29,6 @@ public:
 	{
 		return MDRRadar_Datas;
 	}
-	vector<pair<int, float>> Find_peak(std::vector<float> _Data);
 	
 
 

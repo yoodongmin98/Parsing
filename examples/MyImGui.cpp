@@ -1,25 +1,22 @@
-#include <vector>
-#include <numeric>
-#include <algorithm>
-#include <random>
-#include "MyImGui.h"
-#include <math.h>
-#include <stdlib.h>
-#include <iostream>
-#include <unordered_map>
-#include "Core.h"
 #include "Buffer.h"
+#include "Calculator.h"
 #include "DataClass.h"
+#include "MyImGui.h"
+#include <algorithm>
+#include <iostream>
+#include <math.h>
+#include <numeric>
+#include <random>
+#include <stdlib.h>
+#include <unordered_map>
+#include <vector>
 
 
 MyImGui::MyImGui()
 {
-	Cores = std::make_shared<Core>();
 	InstanceBuffer = std::make_shared<Buffer>();
+	Calculators = std::make_shared<Calculator>();
 	Speed.resize(20);
-	
-
-		
 }
 MyImGui::~MyImGui()
 {
@@ -100,11 +97,11 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 }
 
 
-void MyImGui::Instance(int argc, char** argv)
+void MyImGui::Instance()
 {
 	WNDCLASSEXW wc = { sizeof(wc), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(nullptr), nullptr, nullptr, nullptr, nullptr, L"ImGui Example", nullptr };
 	::RegisterClassExW(&wc);
-	HWND hwnd = ::CreateWindowW(wc.lpszClassName, L"Dear ImGui DirectX9 Example", WS_OVERLAPPEDWINDOW, -2520, -300, 2500, 1280, nullptr, nullptr, wc.hInstance, nullptr);
+	HWND hwnd = ::CreateWindowW(wc.lpszClassName, L"Dear ImGui DirectX9 Example", WS_OVERLAPPEDWINDOW, 0,0, 2500, 1280, nullptr, nullptr, wc.hInstance, nullptr);
 
 	if (!CreateDeviceD3D(hwnd))
 	{
@@ -174,8 +171,9 @@ void MyImGui::Instance(int argc, char** argv)
 		ImGui_ImplWin32_NewFrame();
 		ImGui::NewFrame();
 
-		//Core Start
-		CoreStartAndGraphDebug(argc, argv);
+		///////////////////Calculator Start//////////////////////////
+		CalculatorStartAndGraphDebug();
+		/////////////////////////////////////////////////////////////
 
 		g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, FALSE);
 		g_pd3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
@@ -205,12 +203,12 @@ void MyImGui::Instance(int argc, char** argv)
 
 
 
-void MyImGui::CoreStartAndGraphDebug(int argc, char** argv)
+void MyImGui::CalculatorStartAndGraphDebug()
 {
 	//////////////////////////CoreStart//////////////////////////
 	/////													/////
 	/////													/////
-					Cores->Start(argc, argv);
+				Calculators->CalCulate();
 	/////													/////
 	/////													/////
 	/////////////////////////////////////////////////////////////

@@ -1,18 +1,18 @@
+#include "Core.h"
+#include "ParsingClass.h"
 #include <iostream>
 #include <string>
-#include "Core.h"
-#include "Calculator.h"
-#include "serial/serial.h"
 
 
 
 
-
+Core* Core::Cores = nullptr;
 
 
 Core::Core()
 {
-	Calculators = std::make_shared<Calculator>();
+	Cores = this;
+	Classes = std::make_shared<ParsingClass>();
 }
 Core::~Core()
 {
@@ -20,24 +20,24 @@ Core::~Core()
 }
 
 
-void Core::Start(int argc, char** argv)
+void Core::Start()
 {
-	//포트와 baudrate설정
-	port = "COM4";
-	baud = 921600;
+	std::string PortNum;
+	unsigned int Baudrate;
+	unsigned int Company;
 
-	serial::Serial my_serial(port, baud, serial::Timeout::simpleTimeout(1000));
+	std::cout << "포트 번호를 입력하세요(COM제외 숫자만) : ";
+	std::cin >> PortNum;
+	std::cout << "Baudrate를 입력하세요 : ";
+	std::cin >> Baudrate;
+	std::cout << "칩 회사명을 선택해주세요" << std::endl;
+	std::cout << "[ IQ데이터 확인 : 1 ] [ TI : 2 ]" << std::endl;
+	std::cin >> Company;
+	Classes->SetCompanyData(static_cast<CompanyData>(Company));
 
 
-	if (my_serial.available())
-	{
-		//여기서 데이터 부분만 골라내는 작업 필요(파싱 필요)
-		//순수 데이터만 나올경우 원본데이터크기만큼 for문 돌리면됨
-		//헤더에서 DataSize설정하면됨
-		for (auto i = 0; i < DataSize; ++i)
-		{
-			my_serial.read(&byte, 1);
-			Calculators->CalCulate(byte);
-		}
-	}
+	//포트와 baudrate설정저장
+	port = "COM"+ PortNum;
+	baud = Baudrate;
+	Classes->ParsingStart();
 }

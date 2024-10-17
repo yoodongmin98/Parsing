@@ -1,17 +1,17 @@
-#include <iostream>
 #include <algorithm>
+#include <iostream>
 #include <numeric>
 
+#include "AdcFilter.h"
 #include "Buffer.h"
 #include "DataClass.h"
-#include "AdcFilter.h"
 #include "MyFFT.h"
 
 #include "kiss_fft.h"
 
 Buffer* Buffer::Buffers;
 
-using namespace std;
+
 Buffer::Buffer()
 {
 	Buffers = this;

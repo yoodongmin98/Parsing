@@ -89,7 +89,7 @@
     <ClCompile Include="ThirdParty\kissfft\kiss_fft.c">
       <Filter>Code\ThirdParty\KissFFT</Filter>
     </ClCompile>
-    <ClCompile Include="ParsingClass.cpp">
+    <ClCompile Include="..\..\examples\ParsingClass.cpp">
       <Filter>Code\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -148,7 +148,7 @@
     <ClInclude Include="ThirdParty\kissfft\kiss_fft.h">
       <Filter>Code\ThirdParty\KissFFT</Filter>
     </ClInclude>
-    <ClInclude Include="ParsingClass.h">
+    <ClInclude Include="..\..\examples\ParsingClass.h">
       <Filter>Code\Header Files</Filter>
     </ClInclude>
   </ItemGroup>

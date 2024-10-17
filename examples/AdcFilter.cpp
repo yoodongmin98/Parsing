@@ -1,8 +1,8 @@
-#include <vector>
-#include <algorithm>
-#include <numeric>
 #include "AdcFilter.h"
 #include "DataClass.h"
+#include <algorithm>
+#include <numeric>
+#include <vector>
 
 
 AdcFilter::AdcFilter()

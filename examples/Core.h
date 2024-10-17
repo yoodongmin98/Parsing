@@ -1,21 +1,29 @@
 #pragma once
+#include <string>
+#include <iostream>
 
-
-#define DataSize 4096 //DataSize¼³Á¤
-
-class Calculator;
+class ParsingClass;
 class Core
 {
 public:
+	static Core* Cores;
 	Core();
 	~Core();
 	
-	void Start(int argc, char** argv);
+	void Start();
+
+	inline const std::string GetPortNumber()
+	{
+		return port;
+	}
+	inline const unsigned int GetBaudrate()
+	{
+		return baud;
+	}
 protected:
 
 private:
-	uint8_t byte = 0;
 	std::string port;
 	unsigned long baud = 0;
-	std::shared_ptr<Calculator> Calculators = nullptr;
+	std::shared_ptr<class ParsingClass> Classes = nullptr;
 };

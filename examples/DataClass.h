@@ -1,6 +1,6 @@
 #pragma once
 #include <cstdint>
-
+#include <vector>
 
 
 
@@ -73,6 +73,7 @@ private:
 class DopplerSimpleResult final
 {
 public:
+	//초기화는 먼 미래에 알게되면 시켜줄게...
 	DopplerSimpleResult()
 	{
 		Speed.resize(DopplerObjectNum);

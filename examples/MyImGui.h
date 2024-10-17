@@ -1,14 +1,14 @@
 #pragma once
 
+#include "DataClass.h"
 #include "imgui.h"
 #include "imgui_impl_dx9.h"
 #include "imgui_impl_win32.h"
-#include <d3d9.h>
-#include <tchar.h>
 #include "implot.h"  
-#include <queue>
-#include "DataClass.h"
+#include <d3d9.h>
 #include <iostream>
+#include <queue>
+#include <tchar.h>
 #include <vector>
 
 // Data
@@ -21,15 +21,15 @@ static D3DPRESENT_PARAMETERS    g_d3dpp = {};
 LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 
+class Calculator;
 class Buffer;
-class Core;
 class MyImGui
 {
 public:
 	MyImGui();
 	~MyImGui();
 
-	void Instance(int argc, char** argv);
+	void Instance();
 	
 protected:
 private:
@@ -39,11 +39,11 @@ private:
 	void ShutdownImPlot();
 	void ResetDevice();
 
-	void CoreStartAndGraphDebug(int argc, char** argv);
+	void CalculatorStartAndGraphDebug();
 
 
-	std::shared_ptr<Core> Cores = nullptr;
 	std::shared_ptr<Buffer> InstanceBuffer = nullptr;
+	std::shared_ptr<Calculator> Calculators = nullptr;
 
 	//Graph 따로 띄우기 위해 나눠서 저장
 	std::vector<float> Classify_I;
@@ -73,17 +73,4 @@ private:
 	std::vector<float> MAG;
 	std::vector<float> Freq;
 	std::vector<float> Speed;
-
-	
-
-
-
-	//Test
-	std::vector<int> MaxIndex;
-	std::vector<float> SpeedVector;
-	std::vector<int> SpeedVector2;
-	std::vector<int> SpeedVector3;
-	int MaxValue = 0;
-	int Count = 0;
-	bool TestBool = true;
 };
