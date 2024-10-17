@@ -12,6 +12,7 @@ enum class CompanyData
 	TI,
 };
 
+
 class ParsingClass
 {
 	friend class Core;
@@ -34,4 +35,5 @@ public:
 private:
 	CompanyData Datas = CompanyData::NONE;
 	std::shared_ptr<class MyImGui> MyImGuis = nullptr;
+	std::shared_ptr<class TI> Texas = nullptr;
 };

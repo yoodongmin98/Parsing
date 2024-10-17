@@ -92,6 +92,9 @@
     <ClCompile Include="..\..\examples\ParsingClass.cpp">
       <Filter>Code\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\examples\TI.cpp">
+      <Filter>Code\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\examples\MyImGui.h">
@@ -149,6 +152,9 @@
       <Filter>Code\ThirdParty\KissFFT</Filter>
     </ClInclude>
     <ClInclude Include="..\..\examples\ParsingClass.h">
+      <Filter>Code\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\examples\TI.h">
       <Filter>Code\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
