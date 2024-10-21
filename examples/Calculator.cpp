@@ -2,6 +2,7 @@
 #include "Calculator.h"
 #include "serial/serial.h"
 #include "Core.h"
+#include "DataClass.h"
 #include <cstdint>
 
 Calculator::Calculator()
@@ -20,7 +21,7 @@ Calculator::~Calculator()
 void Calculator::CalCulate()
 {
 	serial::Serial my_serial(Core::Cores->GetPortNumber(), Core::Cores->GetBaudrate(), serial::Timeout::simpleTimeout(1000));
-	for (auto i = 0; i < 4096; ++i)
+	for (auto i = 0; i < MaxFFTSize; ++i)
 	{
 		my_serial.read(&byte,1);
 		Buffer::Buffers->Fill_Adc_raw_buf(byte); // Fill Adc_raw_buf

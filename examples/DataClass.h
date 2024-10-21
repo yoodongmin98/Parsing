@@ -11,6 +11,8 @@
 #define PI 3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679
 #define AdcFilterSize_MAX 9
 #define AdcFilterSize_MIN 1
+#define MaxFFTSize 4096
+#define MagicNumberSize 8
 class Buffer;
 class MyImGui;
 enum class EnumDirection

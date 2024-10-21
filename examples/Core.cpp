@@ -30,7 +30,7 @@ void Core::Start()
 	std::cin >> PortNum;
 	std::cout << "Baudrate를 입력하세요 : ";
 	std::cin >> Baudrate;
-	std::cout << "칩 회사명을 선택해주세요" << std::endl;
+	std::cout << "확인 할 데이터를 입력하세요" << std::endl;
 	std::cout << "[ IQ데이터 확인 : 1 ] [ TI : 2 ]" << std::endl;
 	std::cin >> Company;
 	Classes->SetCompanyData(static_cast<CompanyData>(Company));

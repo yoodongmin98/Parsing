@@ -14,5 +14,5 @@ public:
 protected:
 
 private:
-	uint8_t byte;
+	uint8_t byte = 0;
 };
