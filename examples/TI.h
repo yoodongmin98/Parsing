@@ -68,7 +68,7 @@ private:
 	uint8_t byte = 0;
 	size_t BufferSize = 0;
 	int Point = 0;
-	int SerialSize = 0;
+	int PacketSize = 0;
 
 
 	///////////////////////Header(MagicNumber)////////////////////////
@@ -103,37 +103,7 @@ private:
 	void SetHeaderData();
 	void ConsoleBufferPrint();
 	void SetUARTData();
-	float ParsingDataPrint(std::string _PrintData, int _posX, int _posY, std::string _floatint, int _bytesize = 4, float _multiply = 0)
-	{
-		transform(_floatint.begin(), _floatint.end(), _floatint.begin(), ::toupper);
-
-		char PrintInfo[64];
-
-		if (_floatint == "FLOAT")
-		{
-			float Data = 0.0f;
-			memcpy(&Data, &Header[offset], sizeof(float));
-			sprintf(PrintInfo, (_PrintData + " : %f ").c_str(), Data);
-			offset += 4;
-			ScreenPrint(_posX, _posY, PrintInfo);
-			return Data;
-		}
-		if (_floatint == "INT")
-		{
-			int BitData = 0;
-			for (auto i = 0; i < _bytesize; ++i)
-			{
-				BitData |= (Header[offset + i] << i * 8);
-			}
-			if(_multiply)
-				sprintf(PrintInfo, (_PrintData + " : %d ").c_str(), BitData* _multiply);
-			else
-				sprintf(PrintInfo, (_PrintData + " : %d ").c_str(), BitData);
-			offset += _bytesize;
-			ScreenPrint(_posX, _posY, PrintInfo);
-			return static_cast<int>(BitData);
-		}
-	}
+	float ParsingDataPrint(std::string _PrintData, int _posX, int& _posY, std::string _floatint, int _bytesize = 4, float _multiply = 0);
 
 
 	////////////////////Double Buffer Setting/////////////////////

@@ -37,7 +37,6 @@ void TI::Instance()
 			my_serial.read(&byte, 1);
 			Header.push_back(byte);
 		}
-		SerialSize = Header.size();
 		if (Header.size() > TotalPacketLen+500)
 		{
 			while (Point <= Header.size() - 8)
@@ -80,23 +79,25 @@ void TI::PrintData()
 
 void TI::SetHeaderData()
 {
+	int LineStartPoint = 0;
 	offset = 8;
-	ParsingDataPrint("Version", 0, 0, "int");
-	ParsingDataPrint("TotalPacketLen", 0, 1, "int");
-	ParsingDataPrint("Platform", 0, 2, "int");
-	ParsingDataPrint("FrameNumber", 0, 3, "int");
-	ParsingDataPrint("TimeCpuCycles", 0, 4, "int");
-	ParsingDataPrint("NumDetectedObj", 0, 5, "int");
-	ParsingDataPrint("NumTLVs", 0, 6, "int");
-	ParsingDataPrint("SubFrameNumber", 0, 7, "int");
+	ParsingDataPrint("Version", 0, LineStartPoint, "int");
+	PacketSize=ParsingDataPrint("TotalPacketLen", 0, LineStartPoint, "int");
+	ParsingDataPrint("Platform", 0, LineStartPoint, "int");
+	ParsingDataPrint("FrameNumber", 0, LineStartPoint, "int");
+	ParsingDataPrint("TimeCpuCycles", 0, LineStartPoint, "int");
+	ParsingDataPrint("NumDetectedObj", 0, LineStartPoint, "int");
+	ParsingDataPrint("NumTLVs", 0, LineStartPoint, "int");
+	ParsingDataPrint("SubFrameNumber", 0, LineStartPoint, "int");
 	//Header 재탐색용 초기화
 	Point = 1;
 }
 
 void TI::SetUARTData()
 {
-	int Type = ParsingDataPrint("Type", 0, 13, "int");
-	ParsingDataPrint("Length", 0, 14, "int");
+	int LineStartPoint = 13; //이거 기준으로 print함수안에 offset처럼 자동으로 줄넘김해주는 함수 만들기
+	int Type = ParsingDataPrint("Type", 0, LineStartPoint, "int");
+	int Length = ParsingDataPrint("Length", 0, LineStartPoint, "int");
 	switch (static_cast<TypeName>(Type))
 	{
 	case TypeName::MMWDEMO_OUTPUT_MSG_DETECTED_POINTS:
@@ -110,20 +111,24 @@ void TI::SetUARTData()
 	case TypeName::MMWDEMO_OUTPUT_MSG_TEMPERATURE_STATS:
 	case TypeName::MMWDEMO_OUTPUT_EXT_MSG_DETECTED_POINTS:
 	{
-		float UnitValue=ParsingDataPrint("xyzUnit", 0, 15, "float");
-		ParsingDataPrint("dopplerUnit", 0, 16, "float");
-		ParsingDataPrint("snrUnit", 0, 17, "float");
-		ParsingDataPrint("noiseUnit", 0, 18, "float");
-		ParsingDataPrint("numDetectedPoint1", 0, 19, "int",2);
-		ParsingDataPrint("numDetectedPoint2", 0, 20, "int",2);
+		char DataName[128] = "20byte(xyzUnit,dopperUnit,snrUnit,noiseUnit,numDetectedPoints) + 10byte(x,y,z,doppler,snr,noise) X NumDetected Obj";
+		ScreenPrint(0, LineStartPoint, DataName);
+
+		//LineStart 너 왜 여기서 f에서 안올라가냐 이 괘씸한놈아
+		float UnitValue=ParsingDataPrint("xyzUnit", 0, LineStartPoint, "float"); //나중에 pos도 다 변수로 바꿔야함 + 데이터 여러개면 합산의 평균을 구해야할듯
+		ParsingDataPrint("dopplerUnit", 0, LineStartPoint, "float");
+		ParsingDataPrint("snrUnit", 0, LineStartPoint, "float");
+		ParsingDataPrint("noiseUnit", 0, LineStartPoint, "float");
+		ParsingDataPrint("numDetectedPoint1", 0, LineStartPoint, "int",2);
+		ParsingDataPrint("numDetectedPoint2", 0, LineStartPoint, "int",2);
 
 		//point X같은거 자꾸 끊겨서보임 더블버퍼문제인듯
-		ParsingDataPrint("PointX", 0, 22, "int", 2);
-		ParsingDataPrint("PointY", 0, 23, "int", 2);
-		ParsingDataPrint("PointZ", 0, 24, "int", 2);
-		ParsingDataPrint("Doppler", 0, 25, "int", 2);
-		ParsingDataPrint("snr", 0, 26, "int", 1);
-		ParsingDataPrint("noise", 0, 27, "int", 1);
+		ParsingDataPrint("PointX", 0, LineStartPoint, "int", 2);
+		ParsingDataPrint("PointY", 0, LineStartPoint, "int", 2);
+		ParsingDataPrint("PointZ", 0, LineStartPoint, "int", 2);
+		ParsingDataPrint("Doppler", 0, LineStartPoint, "int", 2);
+		ParsingDataPrint("snr", 0, LineStartPoint, "int", 1);
+		ParsingDataPrint("noise", 0, LineStartPoint, "int", 1);
 
 		break;
 	}
@@ -235,4 +240,37 @@ void TI::Release()
 	delete[] NumDetectedObjInfo;
 	delete[] NumTLVsInfo;
 	delete[] SubFrameNumberInfo;
+}
+
+float TI::ParsingDataPrint(std::string _PrintData, int _posX, int& _posY, std::string _floatint, int _bytesize, float _multiply)
+{
+	transform(_floatint.begin(), _floatint.end(), _floatint.begin(), ::toupper);
+
+	char PrintInfo[64];
+
+	if (_floatint == "FLOAT")
+	{
+		float Data = 0.0f;
+		memcpy(&Data, &Header[offset], sizeof(float));
+		sprintf(PrintInfo, (_PrintData + " : %f ").c_str(), Data);
+		offset += 4;
+		ScreenPrint(_posX, _posY, PrintInfo);
+		return Data;
+	}
+	if (_floatint == "INT")
+	{
+		int BitData = 0;
+		for (auto i = 0; i < _bytesize; ++i)
+		{
+			BitData |= (Header[offset + i] << i * 8);
+		}
+		if (_multiply)
+			sprintf(PrintInfo, (_PrintData + " : %d ").c_str(), BitData * _multiply);
+		else
+			sprintf(PrintInfo, (_PrintData + " : %d ").c_str(), BitData);
+		offset += _bytesize;
+		_posY += 1;
+		ScreenPrint(_posX, _posY, PrintInfo);
+		return static_cast<int>(BitData);
+	}
 }
