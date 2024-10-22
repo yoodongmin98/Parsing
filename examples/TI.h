@@ -1,8 +1,11 @@
 #pragma once
 #include <iostream>
 #include <mutex>
+#include <string>
+#include <algorithm>
 #include "serial/serial.h"
 #include "Windows.h"
+#include "DataClass.h"
 
 
 
@@ -67,16 +70,16 @@ private:
 	int Point = 0;
 	int SerialSize = 0;
 
-	
+
 	///////////////////////Header(MagicNumber)////////////////////////
 	std::vector<uint8_t> Header;									//
 	const std::vector<int> MagicNumberArray = { 1,2,3,4,5,6,7,8 };	//
 	//////////////////////////////////////////////////////////////////
-	 
+
 	/////////Header Data//////////
 	size_t offset = 8;			//
 	int Version = 0;			//
-	int TotalPacketLen = 0;		//
+	int TotalPacketLen = 1000;	//
 	int Platform = 0;			//
 	int FrameNumber = 0;		//
 	int TimeCpuCycles = 0;		//
@@ -84,7 +87,7 @@ private:
 	int NumTLVs = 0;			//
 	int SubFrameNumber = 0;		//
 	//////////////////////////////
-	
+
 
 	//Multithread (기회되면 해야지)
 	std::mutex mtx;
@@ -100,6 +103,37 @@ private:
 	void SetHeaderData();
 	void ConsoleBufferPrint();
 	void SetUARTData();
+	float ParsingDataPrint(std::string _PrintData, int _posX, int _posY, std::string _floatint, int _bytesize = 4, float _multiply = 0)
+	{
+		transform(_floatint.begin(), _floatint.end(), _floatint.begin(), ::toupper);
+
+		char PrintInfo[64];
+
+		if (_floatint == "FLOAT")
+		{
+			float Data = 0.0f;
+			memcpy(&Data, &Header[offset], sizeof(float));
+			sprintf(PrintInfo, (_PrintData + " : %f ").c_str(), Data);
+			offset += 4;
+			ScreenPrint(_posX, _posY, PrintInfo);
+			return Data;
+		}
+		if (_floatint == "INT")
+		{
+			int BitData = 0;
+			for (auto i = 0; i < _bytesize; ++i)
+			{
+				BitData |= (Header[offset + i] << i * 8);
+			}
+			if(_multiply)
+				sprintf(PrintInfo, (_PrintData + " : %d ").c_str(), BitData* _multiply);
+			else
+				sprintf(PrintInfo, (_PrintData + " : %d ").c_str(), BitData);
+			offset += _bytesize;
+			ScreenPrint(_posX, _posY, PrintInfo);
+			return static_cast<int>(BitData);
+		}
+	}
 
 
 	////////////////////Double Buffer Setting/////////////////////
@@ -114,14 +148,13 @@ private:
 	clock_t CurTime, OldTime;									//
 	//////////////////////////////////////////////////////////////
 
-	char* SerialSizeInfo = new char[128];
-	char* VersionInfo = new char[128];
-	char* TotalPacketLenInfo = new char[128];
-	char* PlatformInfo = new char[128];
-	char* FrameNumberInfo = new char[128];
-	char* TimeCpuCyclesInfo = new char[128];
-	char* NumDetectedObjInfo = new char[128];
-	char* NumTLVsInfo = new char[128];
-	char* SubFrameNumberInfo = new char[128];
-
+	char* SerialSizeInfo = new char[PrintCharSize];
+	char* VersionInfo = new char[PrintCharSize];
+	char* TotalPacketLenInfo = new char[PrintCharSize];
+	char* PlatformInfo = new char[PrintCharSize];
+	char* FrameNumberInfo = new char[PrintCharSize];
+	char* TimeCpuCyclesInfo = new char[PrintCharSize];
+	char* NumDetectedObjInfo = new char[PrintCharSize];
+	char* NumTLVsInfo = new char[PrintCharSize];
+	char* SubFrameNumberInfo = new char[PrintCharSize];
 };

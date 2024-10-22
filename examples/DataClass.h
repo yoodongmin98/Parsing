@@ -13,6 +13,10 @@
 #define AdcFilterSize_MIN 1
 #define MaxFFTSize 4096
 #define MagicNumberSize 8
+#define PrintCharSize 64
+
+
+
 class Buffer;
 class MyImGui;
 enum class EnumDirection

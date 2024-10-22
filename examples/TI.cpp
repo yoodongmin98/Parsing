@@ -38,7 +38,7 @@ void TI::Instance()
 			Header.push_back(byte);
 		}
 		SerialSize = Header.size();
-		if (Header.size() > 1500) /////////////이거 패킷사이즈에따라 조절하는 함수도 만들어야할듯
+		if (Header.size() > TotalPacketLen+500)
 		{
 			while (Point <= Header.size() - 8)
 			{
@@ -81,47 +81,22 @@ void TI::PrintData()
 void TI::SetHeaderData()
 {
 	offset = 8;
-	// version (4 bytes)
-	Version = (Header[offset] | (Header[offset + 1] << 8) | (Header[offset + 2] << 16) | (Header[offset + 3] << 24));
-	offset += 4;
-
-	// totalPacketLen (4 bytes)
-	TotalPacketLen = (Header[offset] | (Header[offset + 1] << 8) | (Header[offset + 2] << 16) | (Header[offset + 3] << 24));
-	offset += 4;
-
-	// platform (4 bytes)
-	Platform = (Header[offset] | (Header[offset + 1] << 8) | (Header[offset + 2] << 16) | (Header[offset + 3] << 24));
-	offset += 4;
-
-	// frameNumber (4 bytes)
-	FrameNumber = (Header[offset] | (Header[offset + 1] << 8) | (Header[offset + 2] << 16) | (Header[offset + 3] << 24));
-	offset += 4;
-
-	// timeCpuCycles (4 bytes)
-	TimeCpuCycles = (Header[offset] | (Header[offset + 1] << 8) | (Header[offset + 2] << 16) | (Header[offset + 3] << 24));
-	offset += 4;
-
-	// numDetectedObj (4 bytes)
-	NumDetectedObj = (Header[offset] | (Header[offset + 1] << 8) | (Header[offset + 2] << 16) | (Header[offset + 3] << 24));
-	offset += 4;
-
-	// numTLVs (4 bytes)
-	NumTLVs = (Header[offset] | (Header[offset + 1] << 8) | (Header[offset + 2] << 16) | (Header[offset + 3] << 24));
-	offset += 4;
-
-	// subFrameNumber (4 bytes)
-	SubFrameNumber = (Header[offset] | (Header[offset + 1] << 8) | (Header[offset + 2] << 16) | (Header[offset + 3] << 24));
-	offset += 4;
+	ParsingDataPrint("Version", 0, 0, "int");
+	ParsingDataPrint("TotalPacketLen", 0, 1, "int");
+	ParsingDataPrint("Platform", 0, 2, "int");
+	ParsingDataPrint("FrameNumber", 0, 3, "int");
+	ParsingDataPrint("TimeCpuCycles", 0, 4, "int");
+	ParsingDataPrint("NumDetectedObj", 0, 5, "int");
+	ParsingDataPrint("NumTLVs", 0, 6, "int");
+	ParsingDataPrint("SubFrameNumber", 0, 7, "int");
 	//Header 재탐색용 초기화
 	Point = 1;
 }
 
 void TI::SetUARTData()
 {
-	int Type = (Header[offset] | (Header[offset + 1] << 8) | (Header[offset + 2] << 16) | (Header[offset + 3] << 24));
-	offset += 4;
-	int Length = (Header[offset] | (Header[offset + 1] << 8) | (Header[offset + 2] << 16) | (Header[offset + 3] << 24));
-	offset += 4;
+	int Type = ParsingDataPrint("Type", 0, 13, "int");
+	ParsingDataPrint("Length", 0, 14, "int");
 	switch (static_cast<TypeName>(Type))
 	{
 	case TypeName::MMWDEMO_OUTPUT_MSG_DETECTED_POINTS:
@@ -135,13 +110,21 @@ void TI::SetUARTData()
 	case TypeName::MMWDEMO_OUTPUT_MSG_TEMPERATURE_STATS:
 	case TypeName::MMWDEMO_OUTPUT_EXT_MSG_DETECTED_POINTS:
 	{
-		float xyzUnit = 0.0f;
-		memcpy(&xyzUnit, &Header[offset], sizeof(float));
-		offset += 4;
-		float dopplerUnit = 0.0f;
-		memcpy(&dopplerUnit, &Header[offset], sizeof(float));
-		
-		offset = 8;
+		float UnitValue=ParsingDataPrint("xyzUnit", 0, 15, "float");
+		ParsingDataPrint("dopplerUnit", 0, 16, "float");
+		ParsingDataPrint("snrUnit", 0, 17, "float");
+		ParsingDataPrint("noiseUnit", 0, 18, "float");
+		ParsingDataPrint("numDetectedPoint1", 0, 19, "int",2);
+		ParsingDataPrint("numDetectedPoint2", 0, 20, "int",2);
+
+		//point X같은거 자꾸 끊겨서보임 더블버퍼문제인듯
+		ParsingDataPrint("PointX", 0, 22, "int", 2);
+		ParsingDataPrint("PointY", 0, 23, "int", 2);
+		ParsingDataPrint("PointZ", 0, 24, "int", 2);
+		ParsingDataPrint("Doppler", 0, 25, "int", 2);
+		ParsingDataPrint("snr", 0, 26, "int", 1);
+		ParsingDataPrint("noise", 0, 27, "int", 1);
+
 		break;
 	}
 	case TypeName::MMWDEMO_OUTPUT_EXT_MSG_RANGE_PROFILE_MAJOR:
@@ -173,19 +156,11 @@ void TI::SetUARTData()
 	default:
 		break;
 	}
+	offset = 8;
 }
 
 void TI::ConsoleBufferPrint()
 {
-	sprintf(SerialSizeInfo, "담겨있는 Serial Data Size: %d", SerialSize);
-	sprintf(VersionInfo, "Version : %d", Version);
-	sprintf(TotalPacketLenInfo, "TotalPacket : %d", TotalPacketLen);
-	sprintf(PlatformInfo, "Platform : %d", Platform);
-	sprintf(FrameNumberInfo, "FrameNumber: %d", FrameNumber);
-	sprintf(TimeCpuCyclesInfo, "TimeCpuCycles: %d", TimeCpuCycles);
-	sprintf(NumDetectedObjInfo, "NumDetectedObj: %d", NumDetectedObj);
-	sprintf(NumTLVsInfo, "NumTLVs: %d", NumTLVs);
-	sprintf(SubFrameNumberInfo, "SubFrameNumber: %d", SubFrameNumber);
 	CurTime = clock();
 	Render();
 
@@ -246,15 +221,6 @@ void TI::Render()
 		g_numofFPS = 0;
 	}
 	g_numofFPS++;
-	ScreenPrint(1, 10, SerialSizeInfo);
-	ScreenPrint(0, 0, VersionInfo);
-	ScreenPrint(0, 1, TotalPacketLenInfo);
-	ScreenPrint(0, 2, PlatformInfo);
-	ScreenPrint(0, 3, FrameNumberInfo);
-	ScreenPrint(0, 4, TimeCpuCyclesInfo);
-	ScreenPrint(0, 5, NumDetectedObjInfo);
-	ScreenPrint(0, 6, NumTLVsInfo);
-	ScreenPrint(0, 7, SubFrameNumberInfo);
 	ScreenFlipping();
 }
 
