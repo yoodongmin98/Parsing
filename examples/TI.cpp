@@ -25,6 +25,7 @@ TI::~TI()
 	ScreenRelease();
 }
 
+
 void TI::Instance()
 {
 	serial::Serial my_serial(Core::Cores->GetPortNumber(), Core::Cores->GetBaudrate(), serial::Timeout::simpleTimeout(1000));
@@ -42,7 +43,7 @@ void TI::Instance()
 			{
 				if (FindHeader(Point))
 				{
-					OldTime = clock(); // 시간 측정, 0.1초마다 갱신
+					OldTime = clock(); // 시간 측정
 					Header.erase(Header.begin(), Header.begin() + Point);
 					PrintHeaderData();
 					break;
@@ -62,6 +63,7 @@ bool TI::FindHeader(int& Point)
 	sort(CopyArray.begin() + Point, CopyArray.begin() + Point + 8, std::less<uint8_t>());
 	return std::equal(CopyArray.begin() + Point, CopyArray.begin() + Point + 8, MagicNumberArray.begin());
 }
+
 
 void TI::PrintHeaderData()
 {
@@ -109,7 +111,8 @@ void TI::SetPrintData()
 	offset += 4;
 
 	// numTLVs (4 bytes)
-	NumTLVs = (Header[offset] | (Header[offset + 1] << 8) | (Header[offset + 2] << 16) | (Header[offset + 3] << 24));
+	/*NumTLVs = (Header[offset] | (Header[offset + 1] << 8) | (Header[offset + 2] << 16) | (Header[offset + 3] << 24));*/
+	NumTLVs++; //더블버퍼 테스트용
 	offset += 4;
 
 	// subFrameNumber (4 bytes)
@@ -120,30 +123,26 @@ void TI::SetPrintData()
 }
 
 
-
-
-
-
 void TI::ScreenInit()
 {
 	CONSOLE_CURSOR_INFO cci;
 
-	// 화면 버퍼 2개를 만든다.
 	g_hScreen[0] = CreateConsoleScreenBuffer(GENERIC_READ | GENERIC_WRITE, 0, NULL, CONSOLE_TEXTMODE_BUFFER, NULL);
 	g_hScreen[1] = CreateConsoleScreenBuffer(GENERIC_READ | GENERIC_WRITE, 0, NULL, CONSOLE_TEXTMODE_BUFFER, NULL);
 
-	// 커서를 숨긴다.
 	cci.dwSize = 1;
 	cci.bVisible = FALSE;
 	SetConsoleCursorInfo(g_hScreen[0], &cci);
 	SetConsoleCursorInfo(g_hScreen[1], &cci);
 }
 
+
 void TI::ScreenFlipping()
 {
 	SetConsoleActiveScreenBuffer(g_hScreen[g_nScreenIndex]);
 	g_nScreenIndex = !g_nScreenIndex;
 }
+
 
 void TI::ScreenClear()
 {
@@ -152,11 +151,13 @@ void TI::ScreenClear()
 	FillConsoleOutputCharacter(g_hScreen[g_nScreenIndex], ' ', 80 * 25, Coor, &dw);
 }
 
+
 void TI::ScreenRelease()
 {
 	CloseHandle(g_hScreen[0]);
 	CloseHandle(g_hScreen[1]);
 }
+
 
 void TI::ScreenPrint(int x, int y, char* string)
 {
@@ -166,15 +167,14 @@ void TI::ScreenPrint(int x, int y, char* string)
 	WriteFile(g_hScreen[g_nScreenIndex], string, strlen(string), &dw, NULL);
 }
 
+
 void TI::Render()
 {
-
-	if (CurTime - OldTime >= 500) // 출력 코드
+	if (CurTime - OldTime >= 500)
 	{
 		OldTime = CurTime;
 		g_numofFPS = 0;
 	}
-
 	g_numofFPS++;
 	ScreenPrint(0, 0, VersionInfo);
 	ScreenPrint(0, 1, TotalPacketLenInfo);
@@ -186,6 +186,7 @@ void TI::Render()
 	ScreenPrint(0, 7, SubFrameNumberInfo);
 	ScreenFlipping();
 }
+
 
 void TI::Release()
 {
