@@ -86,7 +86,7 @@ private:
 	//////////////////////////////
 	
 
-	//Multithread
+	//Multithread (기회되면 해야지)
 	std::mutex mtx;
 	std::condition_variable cv;
 	bool Data_Ready = false;
@@ -95,7 +95,7 @@ private:
 
 
 
-	bool FindHeader(int& Point);
+	bool FindHeader(int Point);
 	void PrintData();
 	void SetHeaderData();
 	void ConsoleBufferPrint();

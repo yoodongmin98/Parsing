@@ -8,8 +8,6 @@
 #include <iostream>
 #include <Windows.h>
 #include <ctime>
-#include <thread>
-#include <functional>
 
 
 #define _CRT_SECURE_NO_WARNINGS
@@ -27,7 +25,8 @@ TI::~TI()
 	ScreenRelease();
 }
 
-void TI::Data_receiver()
+
+void TI::Instance()
 {
 	serial::Serial my_serial(Core::Cores->GetPortNumber(), Core::Cores->GetBaudrate(), serial::Timeout::simpleTimeout(1000));
 	while (true)
@@ -36,58 +35,36 @@ void TI::Data_receiver()
 		for (auto i = 0; i < BufferSize; ++i)
 		{
 			my_serial.read(&byte, 1);
-			std::lock_guard<std::mutex> lock(mtx);
 			Header.push_back(byte);
 		}
-		if (BufferSize > 0)
-		{
-			std::lock_guard<std::mutex> lock(mtx);
-			Data_Ready = true;
-		}
-		cv.notify_one();
 		SerialSize = Header.size();
+		if (Header.size() > 1500) /////////////이거 패킷사이즈에따라 조절하는 함수도 만들어야할듯
+		{
+			while (Point <= Header.size() - 8)
+			{
+				if (FindHeader(Point))
+				{
+					OldTime = clock(); // 시간 측정
+					Header.erase(Header.begin(), Header.begin() + Point);
+					PrintData();
+					break;
+				}
+				else
+					Point++;
+			}
+		}
 	}
 }
-void TI::Data_processor()
-{
-	while (true)
-	{
-		std::unique_lock<std::mutex> lock(mtx);
-		cv.wait(lock, [this]() { return Data_Ready; });
-		PrintData();
-
-		//while (true)
-		//{
-		//	if (FindHeader(Point))
-		//	{
-		//		OldTime = clock(); // 시간 측정
-		//		Header.erase(Header.begin(), Header.begin() + Point);
-		//		PrintData();
-		//		break;
-		//	}
-		//	else
-		//		Point++;
-		//	Data_Ready = false;
-		//	break;
-		//}
-	}
-}
-void TI::Instance()
-{
-	//멀티쓰레드
-	std::thread T1(std::bind(&TI::Data_receiver, this));
-	std::thread T2(std::bind(&TI::Data_processor, this));
-
-	
-	T1.join();
-	T2.join();
-}
 
 
-bool TI::FindHeader(int& Point)
+bool TI::FindHeader(int Point)
 {
 	//투 포인터
 	std::vector<uint8_t> CopyArray = Header;
+	if (Point < 0 || Point + 8 > CopyArray.size()) // Point가 유효한지 확인
+	{
+		return false; // 유효하지 않으면 false 반환
+	}
 	sort(CopyArray.begin() + Point, CopyArray.begin() + Point + 8, std::less<uint8_t>());
 	return std::equal(CopyArray.begin() + Point, CopyArray.begin() + Point + 8, MagicNumberArray.begin());
 }
@@ -136,7 +113,7 @@ void TI::SetHeaderData()
 	SubFrameNumber = (Header[offset] | (Header[offset + 1] << 8) | (Header[offset + 2] << 16) | (Header[offset + 3] << 24));
 	offset += 4;
 	//Header 재탐색용 초기화
-	Point = 0;
+	Point = 1;
 }
 
 void TI::SetUARTData()
@@ -165,10 +142,6 @@ void TI::SetUARTData()
 		memcpy(&dopplerUnit, &Header[offset], sizeof(float));
 		
 		offset = 8;
-		//Test
-		//계산끝나면 앞 파싱 끝난배열 지우기
-		if(Header.size()>TotalPacketLen)
-			Header.erase(Header.begin(), Header.begin() + TotalPacketLen);
 		break;
 	}
 	case TypeName::MMWDEMO_OUTPUT_EXT_MSG_RANGE_PROFILE_MAJOR:
