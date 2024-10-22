@@ -8,6 +8,8 @@
 #include <iostream>
 #include <Windows.h>
 #include <ctime>
+#include <thread>
+#include <functional>
 
 
 #define _CRT_SECURE_NO_WARNINGS
@@ -25,8 +27,7 @@ TI::~TI()
 	ScreenRelease();
 }
 
-
-void TI::Instance()
+void TI::Data_receiver()
 {
 	serial::Serial my_serial(Core::Cores->GetPortNumber(), Core::Cores->GetBaudrate(), serial::Timeout::simpleTimeout(1000));
 	while (true)
@@ -35,24 +36,51 @@ void TI::Instance()
 		for (auto i = 0; i < BufferSize; ++i)
 		{
 			my_serial.read(&byte, 1);
+			std::lock_guard<std::mutex> lock(mtx);
 			Header.push_back(byte);
 		}
-		if (Header.size() > MagicNumberSize)
+		if (BufferSize > 0)
 		{
-			while (true)
-			{
-				if (FindHeader(Point))
-				{
-					OldTime = clock(); // 시간 측정
-					Header.erase(Header.begin(), Header.begin() + Point);
-					PrintHeaderData();
-					break;
-				}
-				else
-					Point++;
-			}
+			std::lock_guard<std::mutex> lock(mtx);
+			Data_Ready = true;
 		}
+		cv.notify_one();
+		SerialSize = Header.size();
 	}
+}
+void TI::Data_processor()
+{
+	while (true)
+	{
+		std::unique_lock<std::mutex> lock(mtx);
+		cv.wait(lock, [this]() { return Data_Ready; });
+		PrintData();
+
+		//while (true)
+		//{
+		//	if (FindHeader(Point))
+		//	{
+		//		OldTime = clock(); // 시간 측정
+		//		Header.erase(Header.begin(), Header.begin() + Point);
+		//		PrintData();
+		//		break;
+		//	}
+		//	else
+		//		Point++;
+		//	Data_Ready = false;
+		//	break;
+		//}
+	}
+}
+void TI::Instance()
+{
+	//멀티쓰레드
+	std::thread T1(std::bind(&TI::Data_receiver, this));
+	std::thread T2(std::bind(&TI::Data_processor, this));
+
+	
+	T1.join();
+	T2.join();
 }
 
 
@@ -65,27 +93,17 @@ bool TI::FindHeader(int& Point)
 }
 
 
-void TI::PrintHeaderData()
+void TI::PrintData()
 {
-	SetPrintData();
-	sprintf(VersionInfo, "Version : %d", Version);
-	sprintf(TotalPacketLenInfo, "TotalPacket : %d", TotalPacketLen);
-	sprintf(PlatformInfo, "Platform : %d", Platform);
-	sprintf(FrameNumberInfo, "FrameNumber: %d", FrameNumber);
-	sprintf(TimeCpuCyclesInfo, "TimeCpuCycles: %d", TimeCpuCycles);
-	sprintf(NumDetectedObjInfo, "NumDetectedObj: %d", NumDetectedObj);
-	sprintf(NumTLVsInfo, "NumTLVs: %d", NumTLVs);
-	sprintf(SubFrameNumberInfo, "SubFrameNumber: %d", SubFrameNumber);
-	CurTime = clock();
-	Render();
-
-	ScreenClear();
+	SetHeaderData();
+	SetUARTData();
+	ConsoleBufferPrint();
 }
 
 
-void TI::SetPrintData()
+void TI::SetHeaderData()
 {
-	size_t offset = 8;
+	offset = 8;
 	// version (4 bytes)
 	Version = (Header[offset] | (Header[offset + 1] << 8) | (Header[offset + 2] << 16) | (Header[offset + 3] << 24));
 	offset += 4;
@@ -111,15 +129,94 @@ void TI::SetPrintData()
 	offset += 4;
 
 	// numTLVs (4 bytes)
-	/*NumTLVs = (Header[offset] | (Header[offset + 1] << 8) | (Header[offset + 2] << 16) | (Header[offset + 3] << 24));*/
-	NumTLVs++; //더블버퍼 테스트용
+	NumTLVs = (Header[offset] | (Header[offset + 1] << 8) | (Header[offset + 2] << 16) | (Header[offset + 3] << 24));
 	offset += 4;
 
 	// subFrameNumber (4 bytes)
 	SubFrameNumber = (Header[offset] | (Header[offset + 1] << 8) | (Header[offset + 2] << 16) | (Header[offset + 3] << 24));
-
+	offset += 4;
 	//Header 재탐색용 초기화
 	Point = 0;
+}
+
+void TI::SetUARTData()
+{
+	int Type = (Header[offset] | (Header[offset + 1] << 8) | (Header[offset + 2] << 16) | (Header[offset + 3] << 24));
+	offset += 4;
+	int Length = (Header[offset] | (Header[offset + 1] << 8) | (Header[offset + 2] << 16) | (Header[offset + 3] << 24));
+	offset += 4;
+	switch (static_cast<TypeName>(Type))
+	{
+	case TypeName::MMWDEMO_OUTPUT_MSG_DETECTED_POINTS:
+	case TypeName::MMWDEMO_OUTPUT_MSG_RANGE_PROFILE:
+	case TypeName::MMWDEMO_OUTPUT_MSG_NOISE_PROFILE:
+	case TypeName::MMWDEMO_OUTPUT_MSG_AZIMUT_STATIC_HEAT_MAP:
+	case TypeName::MMWDEMO_OUTPUT_MSG_RANGE_DOPPLER_HEAT_MAP:
+	case TypeName::MMWDEMO_OUTPUT_MSG_STATS:
+	case TypeName::MMWDEMO_OUTPUT_MSG_DETECTED_POINTS_SIDE_INFO:
+	case TypeName::MMWDEMO_OUTPUT_MSG_AZIMUT_ELEVATION_STATIC_HEAT_MAP:
+	case TypeName::MMWDEMO_OUTPUT_MSG_TEMPERATURE_STATS:
+	case TypeName::MMWDEMO_OUTPUT_EXT_MSG_DETECTED_POINTS:
+	{
+		float xyzUnit = 0.0f;
+		memcpy(&xyzUnit, &Header[offset], sizeof(float));
+		offset += 4;
+		float dopplerUnit = 0.0f;
+		memcpy(&dopplerUnit, &Header[offset], sizeof(float));
+		
+		offset = 8;
+		//Test
+		//계산끝나면 앞 파싱 끝난배열 지우기
+		if(Header.size()>TotalPacketLen)
+			Header.erase(Header.begin(), Header.begin() + TotalPacketLen);
+		break;
+	}
+	case TypeName::MMWDEMO_OUTPUT_EXT_MSG_RANGE_PROFILE_MAJOR:
+	case TypeName::MMWDEMO_OUTPUT_EXT_MSG_RANGE_PROFILE_MINOR:
+	case TypeName::MMWDEMO_OUTPUT_EXT_MSG_RANGE_AZIMUT_HEAT_MAP_MAJOR:
+	case TypeName::MMWDEMO_OUTPUT_EXT_MSG_RANGE_AZIMUT_HEAT_MAP_MINOR:
+	case TypeName::MMWDEMO_OUTPUT_EXT_MSG_STATS:
+	case TypeName::MMWDEMO_OUTPUT_EXT_MSG_TARGET_LIST:
+	case TypeName::MMWDEMO_OUTPUT_EXT_MSG_TARGET_INDEX:
+	case TypeName::MMWDEMO_OUTPUT_EXT_MSG_MICRO_DOPPLER_RAW_DATA:
+	case TypeName::MMWDEMO_OUTPUT_EXT_MSG_MICRO_DOPPLER_FEATURES:
+	case TypeName::MMWDEMO_OUTPUT_EXT_MSG_RADAR_CUBE_MAJOR:
+	case TypeName::MMWDEMO_OUTPUT_EXT_MSG_RADAR_CUBE_MINOR:
+	case TypeName::MMWDEMO_OUTPUT_EXT_MSG_ENHANCED_PRESENCE_INDICATION:
+	case TypeName::MMWDEMO_OUTPUT_EXT_MSG_ADC_SAMPLES:
+	case TypeName::MMWDEMO_OUTPUT_EXT_MSG_CLASSIFIER_INFO:
+	case TypeName::MMWDEMO_OUTPUT_EXT_MSG_RX_CHAN_COMPENSATION_INFO:
+	case TypeName::MMWDEMO_OUTPUT_MSG_SPHERICAL_POINTS:
+	case TypeName::MMWDEMO_OUTPUT_MSG_TRACKERPROC_3D_TARGET_LIST:
+	case TypeName::MMWDEMO_OUTPUT_MSG_TRACKERPROC_TARGET_INDEX:
+	case TypeName::MMWDEMO_OUTPUT_MSG_TRACKERPROC_TARGET_HEIGHT:
+	case TypeName::MMWDEMO_OUTPUT_MSG_COMPRESSED_POINTS:
+	case TypeName::MMWDEMO_OUTPUT_MSG_PRESCENCE_INDICATION:
+	case TypeName::MMWDEMO_OUTPUT_MSG_OCCUPANCY_STATE_MACHINE:
+	case TypeName::MMWDEMO_OUTPUT_MSG_SURFACE_CLASSIFICATION_PROBABILITY:
+	case TypeName::MMWDEMO_OUTPUT_MSG_GESTURE_FEATURES:
+	case TypeName::MMWDEMO_OUTPUT_MSG_ANN_OP_PROB:
+	case TypeName::MMWDEMO_OUTPUT_EXT_MSG_CAM_TRIGGERS:
+	default:
+		break;
+	}
+}
+
+void TI::ConsoleBufferPrint()
+{
+	sprintf(SerialSizeInfo, "담겨있는 Serial Data Size: %d", SerialSize);
+	sprintf(VersionInfo, "Version : %d", Version);
+	sprintf(TotalPacketLenInfo, "TotalPacket : %d", TotalPacketLen);
+	sprintf(PlatformInfo, "Platform : %d", Platform);
+	sprintf(FrameNumberInfo, "FrameNumber: %d", FrameNumber);
+	sprintf(TimeCpuCyclesInfo, "TimeCpuCycles: %d", TimeCpuCycles);
+	sprintf(NumDetectedObjInfo, "NumDetectedObj: %d", NumDetectedObj);
+	sprintf(NumTLVsInfo, "NumTLVs: %d", NumTLVs);
+	sprintf(SubFrameNumberInfo, "SubFrameNumber: %d", SubFrameNumber);
+	CurTime = clock();
+	Render();
+
+	ScreenClear();
 }
 
 
@@ -176,6 +273,7 @@ void TI::Render()
 		g_numofFPS = 0;
 	}
 	g_numofFPS++;
+	ScreenPrint(1, 10, SerialSizeInfo);
 	ScreenPrint(0, 0, VersionInfo);
 	ScreenPrint(0, 1, TotalPacketLenInfo);
 	ScreenPrint(0, 2, PlatformInfo);
