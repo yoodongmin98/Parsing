@@ -42,8 +42,8 @@ void TI::Instance()
 			Header.push_back(byte);
 		}
 		//기본적으로 하나의 총 패킷프레임만큼 돌려야하므로 초기 TotalPacketLen의 값은 1000 << 추후 변동 가능
-		//그 후에 들어오는 Packet의 길이가 가변하므로 3배의 데이터를 여유를 두어 처리함
-		if (Header.size() > TotalPacketLen * 3)
+		//그 후에 들어오는 Packet의 길이가 가변하므로 2.5배의 데이터를 여유를 두어 처리함
+		if (Header.size() > TotalPacketLen * 2.5)
 		{
 			//Point라는 변수가 Header안에 담긴 매직넘버를 찾기때문에 HeaderSize-8만큼만 돌아감
 			while (Point <= Header.size() - 8)
@@ -131,12 +131,22 @@ void TI::SetUARTData()
 	case TypeName::MMWDEMO_OUTPUT_MSG_AZIMUT_STATIC_HEAT_MAP:
 	case TypeName::MMWDEMO_OUTPUT_MSG_RANGE_DOPPLER_HEAT_MAP:
 	case TypeName::MMWDEMO_OUTPUT_MSG_STATS:
+	{
+		int MiddleX = 65;
+		CharPrint("----------------------------------------------------데이터 길이----------------------------------------------------", 20, LineStartPoint);
+		CharPrint("24byte(interframetime 4byte + transmitOutputTime + interframemargin 4byte + interchirpmargin 4 byte + activeframeCPU 4 byte + interframeCPU + 4 byte", 20, LineStartPoint);
+		CharPrint("-------------------------------------------------------------------------------------------------------------------", 20, LineStartPoint);
+		CharPrint("★입력된 데이터의 타입은 'MMWDEMO_OUTPUT_MSG_STATS' 입니다★ ", 40, LineStartPoint);
+		LineStartPoint++;
+		ParsingDataPrint("TypeNumber", MiddleX, LineStartPoint, "int");
+		int Length = ParsingDataPrint("Length", MiddleX, LineStartPoint, "int");
+	}
 	case TypeName::MMWDEMO_OUTPUT_MSG_DETECTED_POINTS_SIDE_INFO:
 	case TypeName::MMWDEMO_OUTPUT_MSG_AZIMUT_ELEVATION_STATIC_HEAT_MAP:
 	case TypeName::MMWDEMO_OUTPUT_MSG_TEMPERATURE_STATS:
 	case TypeName::MMWDEMO_OUTPUT_EXT_MSG_DETECTED_POINTS:
 	{
-		int MiddleX = 70;
+		int MiddleX = 65;
 		CharPrint("----------------------------------------------------데이터 길이----------------------------------------------------", 20, LineStartPoint);
 		CharPrint("20byte(xyzUnit,dopperUnit,snrUnit,noiseUnit,numDetectedPoints) + 10byte(x,y,z,doppler,snr,noise) X NumDetected Obj", 20, LineStartPoint);
 		CharPrint("-------------------------------------------------------------------------------------------------------------------", 20, LineStartPoint);
@@ -169,9 +179,9 @@ void TI::SetUARTData()
 	}
 	case TypeName::MMWDEMO_OUTPUT_EXT_MSG_RANGE_PROFILE_MAJOR:
 	{
-		int MiddleX = 70;
+		int MiddleX = 65;
 		CharPrint("----------------------------------------------------데이터 길이----------------------------------------------------", 20, LineStartPoint);
-		CharPrint("----------------------------------------(Number Of Range Bins) x (4 Bytes)----------------------------------------", 20, LineStartPoint);
+		CharPrint("----------------------------------------(Number Of Range Bins) x (4 Bytes)-----------------------------------------", 20, LineStartPoint);
 		CharPrint("-------------------------------------------------------------------------------------------------------------------", 20, LineStartPoint);
 		CharPrint("★입력된 데이터의 타입은 'MMWDEMO_OUTPUT_EXT_MSG_RANGE_PROFILE_MAJOR' 입니다★ ", 36, LineStartPoint);
 		LineStartPoint++;
@@ -186,7 +196,7 @@ void TI::SetUARTData()
 	case TypeName::MMWDEMO_OUTPUT_EXT_MSG_RANGE_AZIMUT_HEAT_MAP_MINOR:
 	case TypeName::MMWDEMO_OUTPUT_EXT_MSG_STATS:
 	{
-		int MiddleX = 70;
+		int MiddleX = 65;
 		CharPrint("----------------------------------------------------데이터 길이----------------------------------------------------", 20, LineStartPoint);
 		CharPrint("------------24 Bytes(InterFrame 4byte + transmitOutput 4byte + powerMeasured 8byte + tempReading 8byte)------------", 20, LineStartPoint);
 		CharPrint("-------------------------------------------------------------------------------------------------------------------", 20, LineStartPoint);
@@ -194,7 +204,6 @@ void TI::SetUARTData()
 		LineStartPoint++;
 		ParsingDataPrint("TypeNumber", MiddleX, LineStartPoint, "int");
 		int Length = ParsingDataPrint("Length", MiddleX, LineStartPoint, "int");
-
 		ParsingDataPrint("InterFrameProcessingTime[usec] : ", MiddleX, LineStartPoint, "int");
 		ParsingDataPrint("TransmitOutputTime[usec] : ", MiddleX, LineStartPoint, "int");
 		ParsingDataPrint("PowerMeasured[1] : ", MiddleX, LineStartPoint, "int",2);

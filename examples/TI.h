@@ -105,6 +105,8 @@ private:
 	void SetUARTData();
 	float ParsingDataPrint(std::string _PrintData, int _posX, int& _posY, std::string _floatint, int _bytesize = 4, float _multiply = 0);
 	void CharPrint(std::string _PrintChar, int _posX, int& _posY);
+	//처음 패킷프레임 출력
+	void TestFunction();
 
 	////////////////////Double Buffer Setting/////////////////////
 	void ScreenInit();											//
