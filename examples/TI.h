@@ -68,7 +68,7 @@ private:
 	uint8_t byte = 0;
 	size_t BufferSize = 0;
 	int Point = 0;
-	int PacketSize = 0;
+	int LineStartPoint = 11;
 
 
 	///////////////////////Header(MagicNumber)////////////////////////
@@ -104,7 +104,7 @@ private:
 	void ConsoleBufferPrint();
 	void SetUARTData();
 	float ParsingDataPrint(std::string _PrintData, int _posX, int& _posY, std::string _floatint, int _bytesize = 4, float _multiply = 0);
-
+	void CharPrint(std::string _PrintChar, int _posX, int& _posY);
 
 	////////////////////Double Buffer Setting/////////////////////
 	void ScreenInit();											//
@@ -117,14 +117,4 @@ private:
 	int g_numofFPS = 0;											//
 	clock_t CurTime, OldTime;									//
 	//////////////////////////////////////////////////////////////
-
-	char* SerialSizeInfo = new char[PrintCharSize];
-	char* VersionInfo = new char[PrintCharSize];
-	char* TotalPacketLenInfo = new char[PrintCharSize];
-	char* PlatformInfo = new char[PrintCharSize];
-	char* FrameNumberInfo = new char[PrintCharSize];
-	char* TimeCpuCyclesInfo = new char[PrintCharSize];
-	char* NumDetectedObjInfo = new char[PrintCharSize];
-	char* NumTLVsInfo = new char[PrintCharSize];
-	char* SubFrameNumberInfo = new char[PrintCharSize];
 };
