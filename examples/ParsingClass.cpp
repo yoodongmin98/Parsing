@@ -2,13 +2,14 @@
 #include "ParsingClass.h"
 #include "MyImGui.h"
 #include "Ti.h"
-
+#include "TimeStamp.h"
 
 
 ParsingClass::ParsingClass()
 {
 	MyImGuis = std::make_shared<MyImGui>();
 	Texas = std::make_shared<TI>();
+	UART_TimeStamp = std::make_shared<TimeStamp>();
 }
 
 ParsingClass::~ParsingClass()
@@ -37,6 +38,11 @@ void ParsingClass::ParsingStart()
 		case CompanyData::TI:
 		{
 			Texas->Instance();
+			break;
+		}
+		case CompanyData::TIMESTAMP :
+		{
+
 			break;
 		}
 		}
