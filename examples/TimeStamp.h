@@ -9,7 +9,7 @@ public:
 	TimeStamp();
 	~TimeStamp();
 
-	
+	void Instance();
 protected:
 private:
 

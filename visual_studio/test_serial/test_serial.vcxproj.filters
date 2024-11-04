@@ -95,6 +95,9 @@
     <ClCompile Include="..\..\examples\TI.cpp">
       <Filter>Code\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\examples\TimeStamp.cpp">
+      <Filter>Code\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\examples\MyImGui.h">
@@ -157,5 +160,13 @@
     <ClInclude Include="..\..\examples\TI.h">
       <Filter>Code\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\examples\TimeStamp.h">
+      <Filter>Code\Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\..\..\..\..\ProgramData\Microsoft\Windows\Start Menu\Programs\Texas Instruments\UniFlash.lnk">
+      <Filter>Code\Source Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

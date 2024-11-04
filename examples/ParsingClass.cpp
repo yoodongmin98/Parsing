@@ -42,7 +42,7 @@ void ParsingClass::ParsingStart()
 		}
 		case CompanyData::TIMESTAMP :
 		{
-
+			UART_TimeStamp->Instance();
 			break;
 		}
 		}

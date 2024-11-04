@@ -136,6 +136,7 @@
     <ClCompile Include="..\..\examples\ParsingClass.cpp" />
     <ClCompile Include="..\..\examples\serial_main.cpp" />
     <ClCompile Include="..\..\examples\TI.cpp" />
+    <ClCompile Include="..\..\examples\TimeStamp.cpp" />
     <ClCompile Include="ThirdParty\ImGui\backends\imgui_impl_dx9.cpp" />
     <ClCompile Include="ThirdParty\ImGui\backends\imgui_impl_win32.cpp" />
     <ClCompile Include="ThirdParty\ImGui\imgui.cpp" />
@@ -163,6 +164,7 @@
     <ClInclude Include="..\..\examples\MyImGui.h" />
     <ClInclude Include="..\..\examples\ParsingClass.h" />
     <ClInclude Include="..\..\examples\TI.h" />
+    <ClInclude Include="..\..\examples\TimeStamp.h" />
     <ClInclude Include="ThirdParty\ImGui\backends\imgui_impl_dx9.h" />
     <ClInclude Include="ThirdParty\ImGui\backends\imgui_impl_win32.h" />
     <ClInclude Include="ThirdParty\ImGui\imconfig.h" />
@@ -174,6 +176,9 @@
     <ClInclude Include="ThirdParty\implot\implot.h" />
     <ClInclude Include="ThirdParty\implot\implot_internal.h" />
     <ClInclude Include="ThirdParty\kissfft\kiss_fft.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\..\..\..\..\ProgramData\Microsoft\Windows\Start Menu\Programs\Texas Instruments\UniFlash.lnk" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
