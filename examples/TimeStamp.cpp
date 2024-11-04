@@ -60,7 +60,7 @@ void TimeStamp::Instance()
 			localtime_s(&tm_2, &now2);
 			std::cout << "\n\n세계 표준 날짜: " << (tm_2.tm_year + 1900) << "/" << (tm_2.tm_mon + 1) << "/" << tm_2.tm_mday << std::endl;
 			std::cout << "한국 표준 시간: " << tm_2.tm_hour << ":" << tm_2.tm_min << ":" << tm_2.tm_sec << std::endl;
-			std::cout << "데이터 출력: " << Dataline;
+			std::cout << "데이터 출력: " << Dataline << std::endl;
 
 			last_data_time = current_time; 
 			no_data_count = 0; 
@@ -75,7 +75,7 @@ void TimeStamp::Instance()
 			std::cout << "\n 7초 동안 데이터가 수신되지 않았습니다." << no_data_count << std::endl;
 			break;
 		}
-
+	
 		std::cout << "\r진행된 시간: " << elapsed << " 초" << std::flush;
 	}
 }
