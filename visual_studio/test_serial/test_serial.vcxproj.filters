@@ -164,9 +164,4 @@
       <Filter>Code\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\..\..\..\..\..\ProgramData\Microsoft\Windows\Start Menu\Programs\Texas Instruments\UniFlash.lnk">
-      <Filter>Code\Source Files</Filter>
-    </None>
-  </ItemGroup>
 </Project>
