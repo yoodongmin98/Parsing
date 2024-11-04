@@ -19,8 +19,6 @@ ParsingClass::~ParsingClass()
 
 void ParsingClass::ParsingStart()
 {
-	while(true)
-	{
 		switch (Datas)
 		{
 		default:
@@ -46,6 +44,5 @@ void ParsingClass::ParsingStart()
 			break;
 		}
 		}
-	}
 }
 	
