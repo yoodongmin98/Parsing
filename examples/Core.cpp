@@ -2,7 +2,7 @@
 #include "ParsingClass.h"
 #include <iostream>
 #include <string>
-
+#include "CSV.h"
 
 
 
@@ -33,6 +33,7 @@ void Core::Start()
 	std::cout << std::endl << "확인 할 데이터를 입력하세요" << std::endl;
 	std::cout << "[ IQ데이터 시각화 : 1 ]" << std::endl << "[ TI UART DATA 확인 : 2 ]" << std::endl;
 	std::cout << "[ Data Timestamp : 3 ]" << std::endl;
+	std::cout << "[ FV Data CSV file생성 : 4 ]" << std::endl;
 	std::cout << "입력 : ";
 	std::cin >> Company;
 	Classes->SetCompanyData(static_cast<CompanyData>(Company));

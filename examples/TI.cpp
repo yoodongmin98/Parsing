@@ -120,7 +120,7 @@ void TI::SetUARTData()
 
 	//Debug용
 	int Type = (Header[offset] | Header[offset + 1] << 8 | Header[offset + 2] << 16 | Header[offset + 3] << 24);
-
+	int a = 0;
 
 	//데이터의 타입에 따라 출력되는 데이터 처리+
 	switch (static_cast<TypeName>(Type))

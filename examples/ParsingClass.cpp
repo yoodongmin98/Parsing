@@ -3,13 +3,14 @@
 #include "MyImGui.h"
 #include "Ti.h"
 #include "TimeStamp.h"
-
+#include "CSV.h"
 
 ParsingClass::ParsingClass()
 {
 	MyImGuis = std::make_shared<MyImGui>();
 	Texas = std::make_shared<TI>();
 	UART_TimeStamp = std::make_shared<TimeStamp>();
+	CSVFile = std::make_shared<CSV>();
 }
 
 ParsingClass::~ParsingClass()
@@ -41,6 +42,11 @@ void ParsingClass::ParsingStart()
 		case CompanyData::TIMESTAMP :
 		{
 			UART_TimeStamp->Instance();
+			break;
+		}
+		case CompanyData::CSV:
+		{
+			CSVFile->Instance();
 			break;
 		}
 		}

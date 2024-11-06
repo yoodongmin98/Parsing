@@ -22,7 +22,7 @@ TimeStamp::~TimeStamp()
 //나중에 시간을 담당하는 class하나만들면될듯
 void TimeStamp::Instance()
 {
-
+	//시리얼 통신을 설정합니다
 	serial::Serial my_serial;
 	my_serial.setPort(Core::Cores->GetPortNumber());
 	my_serial.setBaudrate(Core::Cores->GetBaudrate());
@@ -60,7 +60,7 @@ void TimeStamp::Instance()
 			std::cout << "\n\n세계 표준 날짜: " << (tm_2.tm_year + 1900) << "/" << (tm_2.tm_mon + 1) << "/" << tm_2.tm_mday << std::endl;
 			std::cout << "한국 표준 시간: " << tm_2.tm_hour << ":" << tm_2.tm_min << ":" << tm_2.tm_sec << std::endl;
 			std::cout << "데이터 출력: " << Dataline;
-			std::cout << "데이터가 정상수신되지않은 최대 연속 횟수 : " << Max_NoData_Count << std::endl;
+			std::cout << "데이터가 정상수신되지않은 연속 횟수 : " << Max_NoData_Count << std::endl;
 			Nodata_Time_Count = elapsed;
 			no_data_count = 0; 
 			

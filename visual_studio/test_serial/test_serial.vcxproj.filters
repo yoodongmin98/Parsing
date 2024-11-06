@@ -98,6 +98,9 @@
     <ClCompile Include="..\..\examples\TimeStamp.cpp">
       <Filter>Code\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\examples\CSV.cpp">
+      <Filter>Code\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\examples\MyImGui.h">
@@ -161,6 +164,9 @@
       <Filter>Code\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\examples\TimeStamp.h">
+      <Filter>Code\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\examples\CSV.h">
       <Filter>Code\Header Files</Filter>
     </ClInclude>
   </ItemGroup>

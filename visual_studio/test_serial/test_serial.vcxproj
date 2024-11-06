@@ -128,6 +128,8 @@
       <OptimizeReferences>true</OptimizeReferences>
       <SubSystem>Console</SubSystem>
       <AdditionalDependencies>d3d9.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -135,6 +137,7 @@
     <ClCompile Include="..\..\examples\Buffer.cpp" />
     <ClCompile Include="..\..\examples\Calculator.cpp" />
     <ClCompile Include="..\..\examples\Core.cpp" />
+    <ClCompile Include="..\..\examples\CSV.cpp" />
     <ClCompile Include="..\..\examples\MyFFT.cpp" />
     <ClCompile Include="..\..\examples\MyImGui.cpp" />
     <ClCompile Include="..\..\examples\ParsingClass.cpp" />
@@ -163,6 +166,7 @@
     <ClInclude Include="..\..\examples\Buffer.h" />
     <ClInclude Include="..\..\examples\Calculator.h" />
     <ClInclude Include="..\..\examples\Core.h" />
+    <ClInclude Include="..\..\examples\CSV.h" />
     <ClInclude Include="..\..\examples\DataClass.h" />
     <ClInclude Include="..\..\examples\MyFFT.h" />
     <ClInclude Include="..\..\examples\MyImGui.h" />
