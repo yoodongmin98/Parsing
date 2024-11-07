@@ -23,10 +23,7 @@ TimeStamp::~TimeStamp()
 void TimeStamp::Instance()
 {
 	//시리얼 통신을 설정합니다
-	serial::Serial my_serial;
-	my_serial.setPort(Core::Cores->GetPortNumber());
-	my_serial.setBaudrate(Core::Cores->GetBaudrate());
-	my_serial.setTimeout(serial::Timeout::simpleTimeout(1000));
+	serial::Serial my_serial(Core::Cores->GetPortNumber(), Core::Cores->GetBaudrate(), serial::Timeout::simpleTimeout(1000));
 	try {
 		my_serial.open();
 	}
