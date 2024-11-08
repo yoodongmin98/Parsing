@@ -144,7 +144,8 @@
     <ClCompile Include="..\..\examples\ParsingClass.cpp" />
     <ClCompile Include="..\..\examples\serial_main.cpp" />
     <ClCompile Include="..\..\examples\TI.cpp" />
-    <ClCompile Include="..\..\examples\TimeStamp.cpp" />
+    <ClCompile Include="..\..\examples\SerialTimeStamp.cpp" />
+    <ClCompile Include="..\..\examples\Time.cpp" />
     <ClCompile Include="ThirdParty\ImGui\backends\imgui_impl_dx9.cpp" />
     <ClCompile Include="ThirdParty\ImGui\backends\imgui_impl_win32.cpp" />
     <ClCompile Include="ThirdParty\ImGui\imgui.cpp" />
@@ -172,8 +173,9 @@
     <ClInclude Include="..\..\examples\MyFFT.h" />
     <ClInclude Include="..\..\examples\MyImGui.h" />
     <ClInclude Include="..\..\examples\ParsingClass.h" />
+    <ClInclude Include="..\..\examples\SerialTimeStamp.h" />
     <ClInclude Include="..\..\examples\TI.h" />
-    <ClInclude Include="..\..\examples\TimeStamp.h" />
+    <ClInclude Include="..\..\examples\Time.h" />
     <ClInclude Include="ThirdParty\ImGui\backends\imgui_impl_dx9.h" />
     <ClInclude Include="ThirdParty\ImGui\backends\imgui_impl_win32.h" />
     <ClInclude Include="ThirdParty\ImGui\imconfig.h" />

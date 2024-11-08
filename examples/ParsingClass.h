@@ -40,6 +40,6 @@ private:
 	CompanyData Datas = CompanyData::NONE;
 	std::shared_ptr<class MyImGui> MyImGuis = nullptr;
 	std::shared_ptr<class TI> Texas = nullptr;
-	std::shared_ptr<class TimeStamp> UART_TimeStamp = nullptr;
+	std::shared_ptr<class SerialTimeStamp> UART_TimeStamp = nullptr;
 	std::shared_ptr<class CSV> CSVFile = nullptr;
 };

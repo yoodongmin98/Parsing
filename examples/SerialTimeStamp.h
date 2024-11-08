@@ -3,11 +3,11 @@
 
 
 
-class TimeStamp
+class SerialTimeStamp
 {
 public:
-	TimeStamp();
-	~TimeStamp();
+	SerialTimeStamp();
+	~SerialTimeStamp();
 
 	void Instance();
 protected:

@@ -95,10 +95,13 @@
     <ClCompile Include="..\..\examples\TI.cpp">
       <Filter>Code\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\examples\TimeStamp.cpp">
+    <ClCompile Include="..\..\examples\SerialTimeStamp.cpp">
       <Filter>Code\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\examples\CSV.cpp">
+      <Filter>Code\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\examples\Time.cpp">
       <Filter>Code\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -160,13 +163,16 @@
     <ClInclude Include="..\..\examples\ParsingClass.h">
       <Filter>Code\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\examples\TI.h">
-      <Filter>Code\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\examples\TimeStamp.h">
+    <ClInclude Include="..\..\examples\SerialTimeStamp.h">
       <Filter>Code\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\examples\CSV.h">
+      <Filter>Code\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\examples\TI.h">
+      <Filter>Code\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\examples\Time.h">
       <Filter>Code\Header Files</Filter>
     </ClInclude>
   </ItemGroup>

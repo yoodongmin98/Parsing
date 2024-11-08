@@ -3,7 +3,7 @@
 #include <iostream>
 #include <string>
 #include "CSV.h"
-
+#include "Time.h"
 
 
 Core* Core::Cores = nullptr;
@@ -13,6 +13,7 @@ Core::Core()
 {
 	Cores = this;
 	Classes = std::make_shared<ParsingClass>();
+	Time_s = std::make_shared<Time>();
 }
 Core::~Core()
 {

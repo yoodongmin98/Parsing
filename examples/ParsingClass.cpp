@@ -2,14 +2,14 @@
 #include "ParsingClass.h"
 #include "MyImGui.h"
 #include "Ti.h"
-#include "TimeStamp.h"
+#include "SerialTimeStamp.h"
 #include "CSV.h"
 
 ParsingClass::ParsingClass()
 {
 	MyImGuis = std::make_shared<MyImGui>();
 	Texas = std::make_shared<TI>();
-	UART_TimeStamp = std::make_shared<TimeStamp>();
+	UART_TimeStamp = std::make_shared<SerialTimeStamp>();
 	CSVFile = std::make_shared<CSV>();
 }
 

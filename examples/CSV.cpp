@@ -25,6 +25,7 @@ void CSV::Instance(const int _Size)
 	SetSaveDataSize(_Size);
 	CreateExcel();
 	SerialWrite();
+	SaveToExcel();
 }
 
 

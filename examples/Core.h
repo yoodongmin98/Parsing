@@ -26,4 +26,5 @@ private:
 	std::string port;
 	unsigned long baud = 0;
 	std::shared_ptr<class ParsingClass> Classes = nullptr;
+	std::shared_ptr<class Time> Time_s = nullptr;
 };
