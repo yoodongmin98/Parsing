@@ -22,7 +22,6 @@ void ParsingClass::ParsingStart()
 {
 		switch (Datas)
 		{
-		default:
 		case CompanyData::NONE:
 		{
 			std::cout << "관련 정보가 잘못 입력되었습니다." << std::endl;
@@ -46,8 +45,16 @@ void ParsingClass::ParsingStart()
 		}
 		case CompanyData::CSV:
 		{
-			CSVFile->Instance();
+			int InputSize = 0;
+			std::cout << "저장할 데이터의 사이즈를 입력해주세요" << std::endl;
+			std::cin >> InputSize;
+			CSVFile->Instance(InputSize);
 			break;
+		}
+		default:
+		{
+			std::cout << "정보가 잘못 입력되었습니다" << std::endl;
+			return;
 		}
 		}
 }
