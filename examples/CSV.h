@@ -25,8 +25,9 @@ private:
 	void SaveToExcel();
 
 	int DataSize = 0;
-	int CellCount = 1; //나중에 시간넣으면 0으로 바꿔야함
+	int CellCount = 1;
 	int LineCount = 2;
+	int WriteCount = 0;
 
 	std::string ReadLineData;
 
