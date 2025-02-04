@@ -51,11 +51,6 @@ void SerialTimeStamp::Instance()
 			no_data_count = 0; 
 		}
 
-		if (Max_NoData_Count == 5)
-		{
-			std::cout << std::endl << "데이터가 5번이상 정상 수신되지 않아 프로그램을 종료합니다." << std::endl;
-			return;
-		}
 		if (elapsed - Nodata_Time_Count > 10)
 		{
 			no_data_count++;
