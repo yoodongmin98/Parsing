@@ -73,34 +73,33 @@ void CSV::SerialWrite()
 		std::string Times = Time::Times->GetLocalTime();
 		std::string Cells = Cell[0] + to_string(LineCount);
 		wks.cell(Cells).value().set(Times); //여기 시간나오게 바꿔야함
-		if (ReadLineData[0] == 'N' || ReadLineData[0] == 'Y')
+		
+		for (auto i = 0; i < ReadLineData.size() - 1; ++i)
 		{
-			for (auto i = 0; i < ReadLineData.size() - 1; ++i)
-			{
-				//FV 출력 데이터는 빈칸을 다수 포함하고있으므로 빈칸은 넘김
-				if (ReadLineData[i] == ' ') continue;
-				//콜론을 기준으로 데이터를 나눔
-				//콜론이 아닐때는 string을 하나씩 더해서 문자열을 만들고 콜론이 있으면 엑셀 라인에 그 데이터를 Write함
-				if (ReadLineData[i] != ':') {
-					Data += ReadLineData[i];
-				}
-				else {
-					//A부터 ...알파벳을 담은 Cell을 돌면서 A1 B1 C1순서대로 데이터를 기록함
-					std::string Cells = Cell[CellCount] + to_string(LineCount);
-					//기록
-					wks.cell(Cells).value().set(Data);
-					//벡터내부를 돌기위해 CellCount를 ++하여 B,C,D로 넘긴다.
-					CellCount++;
-					Data.clear();
-				}
+			//FV 출력 데이터는 빈칸을 다수 포함하고있으므로 빈칸은 넘김
+			if (ReadLineData[i] == ' ') continue;
+			//콜론을 기준으로 데이터를 나눔
+			//콜론이 아닐때는 string을 하나씩 더해서 문자열을 만들고 콜론이 있으면 엑셀 라인에 그 데이터를 Write함
+			if (ReadLineData[i] != ':') {
+				Data += ReadLineData[i];
 			}
-			//맨 뒤에는 콜론(:)이 출력되지않으므로 size만큼 전부 돈 후 남은 데이터를 기록하고 필요 변수들을 초기화한다.
-			std::string Cells = Cell[CellCount] + to_string(LineCount);
-			wks.cell(Cells).value().set(Data);
-			Data.clear();
-			WriteCount++; LineCount++; CellCount = 1;
-			std::cout << "\n쓰인 데이터 수 : " << WriteCount << flush;
+			else {
+				//A부터 ...알파벳을 담은 Cell을 돌면서 A1 B1 C1순서대로 데이터를 기록함
+				std::string Cells = Cell[CellCount] + to_string(LineCount);
+				//기록
+				wks.cell(Cells).value().set(Data);
+				//벡터내부를 돌기위해 CellCount를 ++하여 B,C,D로 넘긴다.
+				CellCount++;
+				Data.clear();
+			}
 		}
+		//맨 뒤에는 콜론(:)이 출력되지않으므로 size만큼 전부 돈 후 남은 데이터를 기록하고 필요 변수들을 초기화한다.
+		std::string Cellss = Cell[CellCount] + to_string(LineCount);
+		wks.cell(Cellss).value().set(Data);
+		Data.clear();
+		WriteCount++; LineCount++; CellCount = 1;
+		std::cout << "\n쓰인 데이터 수 : " << WriteCount << flush;
+		
 	}
 }
 
